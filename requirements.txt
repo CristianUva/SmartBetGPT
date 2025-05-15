@@ -19,3 +19,4 @@ dataclasses==0.8; python_version < '3.7'
 mysql-connector-python
 pymysql==1.1.0
 flask-migrate==4.0.5
+mysqlclient>=2.0.0
