@@ -20,3 +20,7 @@ mysql-connector-python
 pymysql==1.1.0
 flask-migrate==4.0.5
 mysqlclient>=2.0.0
+# Dipendenze per sicurezza e ottimizzazione
+python-dateutil>=2.8.2
+markupsafe>=2.1.1
+alembic>=1.9.0  # Richiesto da flask-migrate
