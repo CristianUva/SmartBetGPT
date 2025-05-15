@@ -1,0 +1,933 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Dettagli Partita{% endblock %}
+
+{% block content %}
+<!-- 
+    Container principale della pagina di dettaglio partita
+    Struttura la visualizzazione con header, navigazione e contenuto 
+-->
+<div class="dashboard-container">
+    <!-- Header della pagina con titolo e pulsante di ritorno -->
+    <div class="dashboard-header">
+        <h2>Dettagli Partita</h2>
+        <a href="{{ url_for('match.matches') }}" class="btn-secondary">Torna alle Partite</a>
+    </div>
+    
+    <!-- Menu di navigazione del dashboard con evidenziazione della sezione corrente -->
+    <div class="dashboard-nav">
+        <ul>
+            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('match.matches') }}" class="active">Partite</a></li>
+            <li><a href="{{ url_for('match.statistics') }}">Statistiche</a></li>
+            <li><a href="{{ url_for('chatbot.chatbot_page') }}">ChatBot</a></li>
+        </ul>
+    </div>
+    
+    {% if match %}
+    <!-- Container principale della partita, visibile solo se i dati della partita sono disponibili -->
+    <div class="match-container">
+        <!-- Sezione hero con info sulla competizione e squadre -->
+        <div class="match-hero">
+            <!-- Informazioni sulla competizione, data e sede -->
+            <div class="competition-info">
+                <span class="competition-name">{{ match.competition.name }}</span>
+                <span class="match-date">{{ match.localDate }}</span>
+                <span class="match-stadium">{{ match.venue if match.venue else "Stadio non specificato" }}</span>
+            </div>
+            
+            <!-- Container per visualizzare le squadre e il punteggio -->
+            <div class="teams-container">
+                <!-- Dettagli della squadra di casa -->
+                <div class="team home-team">
+                    <!-- Logo della squadra di casa con fallback se il logo non è disponibile -->
+                    <div class="team-logo">
+                        {% if match.homeTeam.crest %}
+                        <img src="{{ match.homeTeam.crest }}" alt="{{ match.homeTeam.name }}">
+                        {% else %}
+                        <div class="logo-placeholder">{{ match.homeTeam.tla if match.homeTeam.tla else match.homeTeam.name[:1] }}</div>
+                        {% endif %}
+                    </div>
+                    <h3 class="team-name">{{ match.homeTeam.name }}</h3>
+                    <!-- Indicatori della forma recente della squadra (W=vittoria, D=pareggio, L=sconfitta) -->
+                    <div class="team-form">
+                        {% if match.homeTeam.form %}
+                            {% for result in match.homeTeam.form %}
+                                <span class="form-item form-{{ result|lower }}">{{ result }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="no-data">Dati sulla forma non disponibili</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Visualizzazione del punteggio e dello stato della partita -->
+                <div class="match-status">
+                    {% if match.status == "FINISHED" %}
+                        <!-- Partita terminata: mostra il punteggio finale -->
+                        <div class="score">
+                            <span class="home-score">{{ match.score.fullTime.home if match.score.fullTime.home is not none else '-' }}</span>
+                            <span class="score-separator">:</span>
+                            <span class="away-score">{{ match.score.fullTime.away if match.score.fullTime.away is not none else '-' }}</span>
+                        </div>
+                        <span class="status finished">Terminata</span>
+                    {% elif match.status == "IN_PLAY" %}
+                        <!-- Partita in corso: mostra il punteggio attuale -->
+                        <div class="score">
+                            <span class="home-score">{{ match.score.fullTime.home if match.score.fullTime.home is not none else '0' }}</span>
+                            <span class="score-separator">:</span>
+                            <span class="away-score">{{ match.score.fullTime.away if match.score.fullTime.away is not none else '0' }}</span>
+                        </div>
+                        <span class="status live">In corso</span>
+                    {% else %}
+                        <!-- Partita programmata: mostra VS e la data -->
+                        <span class="versus">VS</span>
+                        <span class="status scheduled">{{ match.localDate }}</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Dettagli della squadra in trasferta -->
+                <div class="team away-team">
+                    <!-- Logo della squadra in trasferta con fallback se il logo non è disponibile -->
+                    <div class="team-logo">
+                        {% if match.awayTeam.crest %}
+                        <img src="{{ match.awayTeam.crest }}" alt="{{ match.awayTeam.name }}">
+                        {% else %}
+                        <div class="logo-placeholder">{{ match.awayTeam.tla if match.awayTeam.tla else match.awayTeam.name[:1] }}</div>
+                        {% endif %}
+                    </div>
+                    <h3 class="team-name">{{ match.awayTeam.name }}</h3>
+                    <!-- Indicatori della forma recente della squadra in trasferta -->
+                    <div class="team-form">
+                        {% if match.awayTeam.form %}
+                            {% for result in match.awayTeam.form %}
+                                <span class="form-item form-{{ result|lower }}">{{ result }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="no-data">Dati sulla forma non disponibili</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sistema di tab per navigare tra le diverse sezioni di informazioni -->
+        <div class="match-tabs">
+            <!-- Barra di navigazione delle tab -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="odds">Quote</button>
+                <button class="tab-btn" data-tab="stats">Statistiche</button>
+                <button class="tab-btn" data-tab="prediction">Previsione AI</button>
+                <button class="tab-btn" data-tab="head2head">Scontri Diretti</button>
+            </div>
+            
+            <!-- Contenuto delle tab -->
+            <div class="tab-content">
+                <!-- Tab delle Quote - attiva di default -->
+                <div class="tab-pane active" id="odds">
+                    <h3>Quote</h3>
+                    
+                    <!-- Container per i vari tipi di quote -->
+                    <div class="odds-container">
+                        <!-- Quote per il risultato finale (1X2) -->
+                        <div class="odds-group">
+                            <h4>Risultato Finale</h4>
+                            <div class="odds-table">
+                                <!-- Intestazioni della tabella -->
+                                <div class="odds-header">
+                                    <div>Bookmaker</div>
+                                    <div>1</div>
+                                    <div>X</div>
+                                    <div>2</div>
+                                </div>
+                                
+                                <!-- Visualizzazione delle quote se disponibili -->
+                                {% if match.odds %}
+                                    {% for odd in match.odds %}
+                                        <div class="odds-row">
+                                            <div>{{ odd.bookmaker.name }}</div>
+                                            <div class="odd-value">{{ odd.homeWin if odd.homeWin else '-' }}</div>
+                                            <div class="odd-value">{{ odd.draw if odd.draw else '-' }}</div>
+                                            <div class="odd-value">{{ odd.awayWin if odd.awayWin else '-' }}</div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Messaggio se non ci sono quote disponibili -->
+                                    <div class="no-data-message">
+                                        <p>Nessuna quota disponibile per questa partita.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Quote per Over/Under 2.5 gol -->
+                        <div class="odds-group">
+                            <h4>Over/Under 2.5</h4>
+                            <div class="odds-table">
+                                <div class="odds-header">
+                                    <div>Bookmaker</div>
+                                    <div>Over</div>
+                                    <div>Under</div>
+                                </div>
+                                
+                                <!-- Visualizzazione delle quote Over/Under se disponibili -->
+                                {% if match.odds and match.odds[0].overUnder %}
+                                    {% for odd in match.odds %}
+                                        <div class="odds-row">
+                                            <div>{{ odd.bookmaker.name }}</div>
+                                            <div class="odd-value">{{ odd.overUnder['2.5'].over if odd.overUnder['2.5'] and odd.overUnder['2.5'].over else '-' }}</div>
+                                            <div class="odd-value">{{ odd.overUnder['2.5'].under if odd.overUnder['2.5'] and odd.overUnder['2.5'].under else '-' }}</div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Messaggio se non ci sono quote Over/Under disponibili -->
+                                    <div class="no-data-message">
+                                        <p>Nessuna quota Over/Under disponibile.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Quote per Goal/No Goal (entrambe le squadre segnano) -->
+                        <div class="odds-group">
+                            <h4>Goal/No Goal</h4>
+                            <div class="odds-table">
+                                <div class="odds-header">
+                                    <div>Bookmaker</div>
+                                    <div>GG</div>
+                                    <div>NG</div>
+                                </div>
+                                
+                                <!-- Visualizzazione delle quote Goal/No Goal se disponibili -->
+                                {% if match.odds and match.odds[0].bothTeamsToScore %}
+                                    {% for odd in match.odds %}
+                                        <div class="odds-row">
+                                            <div>{{ odd.bookmaker.name }}</div>
+                                            <div class="odd-value">{{ odd.bothTeamsToScore.yes if odd.bothTeamsToScore.yes else '-' }}</div>
+                                            <div class="odd-value">{{ odd.bothTeamsToScore.no if odd.bothTeamsToScore.no else '-' }}</div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Messaggio se non ci sono quote Goal/No Goal disponibili -->
+                                    <div class="no-data-message">
+                                        <p>Nessuna quota Goal/No Goal disponibile.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab delle Statistiche -->
+                <div class="tab-pane" id="stats">
+                    <h3>Statistiche</h3>
+                    
+                    <!-- Visualizzazione delle statistiche se disponibili -->
+                    {% if match.statistics %}
+                        <div class="stats-container">
+                            <!-- Iterazione su ogni tipo di statistica -->
+                            {% for stat_name, stat_values in match.statistics.items() %}
+                                <div class="stat-row">
+                                    <!-- Nome della statistica -->
+                                    <span class="stat-name">{{ stat_name }}</span>
+                                    <!-- Barra visuale per confrontare i valori tra le due squadre -->
+                                    <div class="stat-bar">
+                                        <!-- Barra per la squadra di casa, larghezza determinata dalla percentuale -->
+                                        <div class="home-bar" style="width: {{ stat_values.home_percentage }}%">{{ stat_values.home }}</div>
+                                        <!-- Barra per la squadra in trasferta -->
+                                        <div class="away-bar" style="width: {{ stat_values.away_percentage }}%">{{ stat_values.away }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- Messaggio se non ci sono statistiche disponibili -->
+                        <div class="no-data-message">
+                            <p>Nessuna statistica disponibile per questa partita.</p>
+                            <p>Le statistiche saranno disponibili non appena la partita inizierà.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Tab della Previsione AI -->
+                <div class="tab-pane" id="prediction">
+                    <h3>Previsione AI</h3>
+                    
+                    <div class="prediction-container">
+                        <!-- Riepilogo della previsione dell'IA -->
+                        <div class="prediction-summary">
+                            <h4>Riepilogo della Previsione</h4>
+                            <!-- Risultato consigliato dall'IA -->
+                            <div class="prediction-result">
+                                <span class="result-label">Risultato Consigliato:</span>
+                                <span class="result-value">In elaborazione...</span>
+                            </div>
+                            <!-- Livello di confidenza dell'IA nella previsione -->
+                            <div class="prediction-confidence">
+                                <span class="confidence-label">Livello di Confidenza:</span>
+                                <div class="confidence-bar">
+                                    <div class="confidence-value" style="width: 0%">0%</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Spiegazione dettagliata della previsione -->
+                        <div class="prediction-breakdown">
+                            <h4>Analisi Dettagliata</h4>
+                            <p class="loading-message">L'analisi dettagliata è in fase di elaborazione...</p>
+                        </div>
+                        
+                        <!-- Disclaimer sull'uso delle previsioni IA -->
+                        <div class="prediction-disclaimer">
+                            <p><strong>Nota:</strong> Questa è una previsione generata automaticamente da un algoritmo di intelligenza artificiale. Non garantisce risultati e non dovrebbe essere l'unica base per le tue decisioni di scommessa.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab degli Scontri Diretti (Head to Head) -->
+                <div class="tab-pane" id="head2head">
+                    <h3>Scontri Diretti</h3>
+                    
+                    <!-- Visualizzazione degli scontri diretti se disponibili -->
+                    {% if match.head2head and match.head2head.matches %}
+                        <!-- Riepilogo statistico degli scontri precedenti -->
+                        <div class="h2h-summary">
+                            <!-- Vittorie della squadra di casa -->
+                            <div class="h2h-stat">
+                                <span class="stat-value">{{ match.head2head.homeTeam.wins }}</span>
+                                <span class="stat-label">Vittorie {{ match.homeTeam.name }}</span>
+                            </div>
+                            <!-- Pareggi -->
+                            <div class="h2h-stat">
+                                <span class="stat-value">{{ match.head2head.draws }}</span>
+                                <span class="stat-label">Pareggi</span>
+                            </div>
+                            <!-- Vittorie della squadra in trasferta -->
+                            <div class="h2h-stat">
+                                <span class="stat-value">{{ match.head2head.awayTeam.wins }}</span>
+                                <span class="stat-label">Vittorie {{ match.awayTeam.name }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Lista delle partite precedenti tra le due squadre -->
+                        <div class="h2h-matches">
+                            <h4>Partite Precedenti</h4>
+                            
+                            {% for h2h_match in match.head2head.matches %}
+                                <!-- Dettagli di ogni partita precedente -->
+                                <div class="h2h-match">
+                                    <!-- Data della partita -->
+                                    <div class="h2h-date">{{ h2h_match.localDate }}</div>
+                                    <!-- Squadre e risultato -->
+                                    <div class="h2h-teams">
+                                        <span class="h2h-home-team">{{ h2h_match.homeTeam.name }}</span>
+                                        <span class="h2h-score">{{ h2h_match.score.fullTime.home }} - {{ h2h_match.score.fullTime.away }}</span>
+                                        <span class="h2h-away-team">{{ h2h_match.awayTeam.name }}</span>
+                                    </div>
+                                    <!-- Competizione in cui si è svolta la partita -->
+                                    <div class="h2h-competition">{{ h2h_match.competition.name }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- Messaggio se non ci sono dati sugli scontri diretti -->
+                        <div class="no-data-message">
+                            <p>Nessun dato disponibile sugli scontri diretti tra queste squadre.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Visualizzato quando i dati della partita non sono disponibili -->
+    <div class="error-container">
+        <h3>Dati non disponibili</h3>
+        <p>Non è stato possibile recuperare i dati per questa partita.</p>
+        <a href="{{ url_for('match.matches') }}" class="btn-primary">Torna alle Partite</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* 
+     * Stili per la visualizzazione dettagliata della partita
+     * Include layout, colori e responsività
+     */
+    
+    /* Container principale della partita */
+    .match-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    /* Sezione hero in alto con i dettagli principali */
+    .match-hero {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1.5rem;
+    }
+    
+    /* Layout per le informazioni sulla competizione */
+    .competition-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    /* Stile per il nome della competizione */
+    .competition-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    /* Stili per la data della partita e lo stadio */
+    .match-date, .match-stadium {
+        color: rgba(255,255,255,0.8);
+    }
+    
+    /* Layout per il contenitore delle squadre e punteggio */
+    .teams-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    /* Stile per il contenitore di ciascuna squadra */
+    .team {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 35%;
+    }
+    
+    /* Stile per i logo delle squadre */
+    .team-logo {
+        width: 80px;
+        height: 80px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    
+    /* Ridimensionamento delle immagini dei logo */
+    .team-logo img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+    /* Stile per il placeholder quando manca il logo */
+    .logo-placeholder {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    /* Stile per il nome della squadra */
+    .team-name {
+        text-align: center;
+        margin: 0;
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
+    
+    /* Layout per gli indicatori di forma recente */
+    .team-form {
+        display: flex;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+    }
+    
+    /* Stile per ogni indicatore di risultato (W/D/L) */
+    .form-item {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    /* Indicatore di vittoria (verde) */
+    .form-w {
+        background-color: #4caf50;
+    }
+    
+    /* Indicatore di pareggio (arancione) */
+    .form-d {
+        background-color: #ff9800;
+    }
+    
+    /* Indicatore di sconfitta (rosso) */
+    .form-l {
+        background-color: #f44336;
+    }
+    
+    /* Layout per lo stato della partita e il punteggio */
+    .match-status {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 30%;
+    }
+    
+    /* Stile per il punteggio della partita */
+    .score {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Separatore tra i punteggi (due punti) */
+    .score-separator {
+        margin: 0 0.5rem;
+        opacity: 0.8;
+    }
+    
+    /* Stile base per gli indicatori di stato partita */
+    .status {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+    }
+    
+    /* Stile per partite in corso (rosso lampeggiante) */
+    .status.live {
+        background-color: #f44336;
+        animation: pulse 1.5s infinite; /* Animazione pulsante per evidenziare partite live */
+    }
+    
+    /* Stile per partite terminate (verde) */
+    .status.finished {
+        background-color: #4caf50;
+    }
+    
+    /* Stile per partite programmate (bianco semitrasparente) */
+    .status.scheduled {
+        background-color: rgba(255,255,255,0.2);
+    }
+    
+    /* Stile per il "VS" nelle partite non ancora iniziate */
+    .versus {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* ----- SISTEMA DI TABS ----- */
+    /* Container per il sistema di tabs */
+    .match-tabs {
+        padding: 1.5rem;
+    }
+    
+    /* Barra di navigazione orizzontale delle tabs */
+    .tabs {
+        display: flex;
+        border-bottom: 1px solid var(--gray-light);
+        margin-bottom: 1.5rem;
+        overflow-x: auto; /* Permette lo scorrimento orizzontale su dispositivi piccoli */
+    }
+    
+    /* Stile per i pulsanti delle tabs */
+    .tab-btn {
+        background: none;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        position: relative;
+        white-space: nowrap; /* Evita l'interruzione del testo su più righe */
+    }
+    
+    /* Stile per la tab attualmente attiva */
+    .tab-btn.active {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+    
+    /* Indicatore visivo sotto la tab attiva (linea colorata) */
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: var(--primary-color);
+    }
+    
+    /* Nasconde i contenuti delle tab non attive */
+    .tab-pane {
+        display: none;
+    }
+    
+    /* Mostra solo il contenuto della tab attiva */
+    .tab-pane.active {
+        display: block;
+    }
+    
+    /* ----- STILI PER LA SEZIONE QUOTE ----- */
+    /* Container per i diversi gruppi di quote */
+    .odds-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    /* Stile per ogni gruppo di quote (1X2, Over/Under, GG/NG) */
+    .odds-group {
+        border: 1px solid var(--gray-light);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+    
+    /* Intestazione di ogni gruppo di quote */
+    .odds-group h4 {
+        margin: 0;
+        padding: 0.8rem 1rem;
+        background-color: var(--gray-light);
+    }
+    
+    /* Struttura tabellare per le quote */
+    .odds-table {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    /* Stile per le righe della tabella (intestazione e dati) */
+    .odds-header, .odds-row {
+        display: table-row;
+    }
+    
+    /* Stile per le celle di intestazione */
+    .odds-header div {
+        font-weight: 600;
+        background-color: var(--gray-light);
+    }
+    
+    /* Stile comune per celle di intestazione e di dati */
+    .odds-header div, .odds-row div {
+        display: table-cell;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid var(--gray-light);
+    }
+    
+    /* Rimuove il bordo inferiore dall'ultima riga */
+    .odds-row:last-child div {
+        border-bottom: none;
+    }
+    
+    /* Stile per i valori delle quote */
+    .odd-value {
+        font-weight: 500;
+        color: var(--primary-color);
+        text-align: center;
+    }
+    
+    /* ----- STILI PER LA SEZIONE STATISTICHE ----- */
+    /* Container per le statistiche della partita */
+    .stats-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    /* Riga per ogni tipo di statistica */
+    .stat-row {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Etichetta per ogni tipo di statistica */
+    .stat-name {
+        margin-bottom: 0.3rem;
+        font-weight: 500;
+    }
+    
+    /* Barra di confronto statistico tra le due squadre */
+    .stat-bar {
+        display: flex;
+        height: 30px;
+        width: 100%;
+        background-color: var(--gray-light);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    /* Stile comune per le barre di entrambe le squadre */
+    .home-bar, .away-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    /* Colore per la barra della squadra di casa */
+    .home-bar {
+        background-color: var(--primary-color);
+    }
+    
+    /* Colore per la barra della squadra in trasferta */
+    .away-bar {
+        background-color: var(--secondary-color);
+    }
+    
+    /* ----- STILI PER LA SEZIONE PREVISIONE AI ----- */
+    /* Container per la previsione AI */
+    .prediction-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    /* Box riepilogativo della previsione */
+    .prediction-summary {
+        background-color: var(--gray-light);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+    }
+    
+    /* Intestazione del riepilogo previsione */
+    .prediction-summary h4 {
+        margin-top: 0;
+    }
+    
+    /* Container per il risultato consigliato */
+    .prediction-result {
+        margin-bottom: 1rem;
+    }
+    
+    /* Stile per il valore del risultato previsto */
+    .result-value {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    /* Barra per visualizzare il livello di confidenza della previsione */
+    .confidence-bar {
+        height: 20px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 0.5rem;
+    }
+    
+    .confidence-value {
+        height: 100%;
+        background-color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .prediction-breakdown {
+        background-color: white;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--gray-light);
+    }
+    
+    .loading-message {
+        color: var(--gray-dark);
+        font-style: italic;
+    }
+    
+    .prediction-disclaimer {
+        font-size: 0.8rem;
+        color: var(--gray-dark);
+        padding: 1rem;
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        border-radius: var(--border-radius);
+    }
+    
+    /* Head to head styles */
+    .h2h-summary {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .h2h-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    .stat-label {
+        color: var(--gray-dark);
+        font-size: 0.9rem;
+        max-width: 120px;
+        text-align: center;
+    }
+    
+    .h2h-matches {
+        border-top: 1px solid var(--gray-light);
+        padding-top: 1rem;
+    }
+    
+    .h2h-match {
+        padding: 0.8rem;
+        border-bottom: 1px solid var(--gray-light);
+    }
+    
+    .h2h-date {
+        color: var(--gray-dark);
+        font-size: 0.8rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .h2h-teams {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.3rem;
+    }
+    
+    .h2h-score {
+        font-weight: 600;
+    }
+    
+    .h2h-competition {
+        font-size: 0.8rem;
+        color: var(--gray-dark);
+    }
+    
+    .no-data-message {
+        padding: 2rem;
+        text-align: center;
+        color: var(--gray-dark);
+        background-color: var(--gray-light);
+        border-radius: var(--border-radius);
+    }
+    
+    .error-container {
+        padding: 3rem;
+        text-align: center;
+        background-color: var(--gray-light);
+        border-radius: var(--border-radius);
+    }
+    
+    @keyframes pulse {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.6;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .teams-container {
+            flex-direction: column;
+        }
+        
+        .team {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        
+        .match-status {
+            width: 100%;
+            margin: 1.5rem 0;
+        }
+        
+        .odds-table {
+            font-size: 0.9rem;
+        }
+        
+        .h2h-summary {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>
+
+<script>
+    /**
+     * JavaScript per gestire le funzionalità interattive della pagina di dettaglio partita
+     * Include: sistema di tabs, caricamento simulato delle previsioni
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+        // ----- FUNZIONALITÀ DI NAVIGAZIONE TABS -----
+        // Seleziona tutti i pulsanti delle tab e i relativi pannelli di contenuto
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        
+        // Aggiunge gestori eventi per i click su ogni tab
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Ottiene l'ID della tab da mostrare dall'attributo data-tab
+                const tabId = this.getAttribute('data-tab');
+                
+                // Reset: rimuove la classe "active" da tutte le tab
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanes.forEach(pane => pane.classList.remove('active'));
+                
+                // Attiva la tab selezionata e il relativo pannello di contenuto
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // ----- SIMULAZIONE DEL CARICAMENTO DELLE PREVISIONI IA -----
+        // Simula un ritardo di 2 secondi prima di mostrare i risultati dell'IA
+        // In una versione reale, questo verrebbe sostituito da una chiamata API
+        setTimeout(() => {
+            // Seleziona gli elementi da aggiornare
+            const resultValue = document.querySelector('.result-value');
+            const confidenceValue = document.querySelector('.confidence-value');
+            const loadingMessage = document.querySelector('.loading-message');
+            
+            // Aggiorna il risultato consigliato e il livello di confidenza
+            resultValue.textContent = "1X (Vittoria casa o pareggio)";
+            confidenceValue.style.width = "68%";
+            confidenceValue.textContent = "68%";
+            
+            // Aggiunge l'analisi dettagliata della previsione
+            loadingMessage.innerHTML = `
+                <p>Abbiamo analizzato diversi fattori per questa partita:</p>
+                <ul>
+                    <li>Forma recente delle squadre</li>
+                    <li>Statistiche di casa/trasferta</li>
+                    <li>Scontri diretti precedenti</li>
+                    <li>Infortuni e squalifiche</li>
+                </ul>
+                <p>La squadra di casa ha mostrato una forma solida nelle ultime partite, con una difesa particolarmente forte. 
+                Sebbene la squadra in trasferta abbia un buon attacco, storicamente ha faticato contro questo avversario.</p>
+                <p>Il nostro algoritmo suggerisce una vittoria della squadra di casa o un pareggio come risultato più probabile.</p>
+            `;
+        }, 2000); // Ritardo di 2 secondi per simulare caricamento dati
+    });
+</script>
+{% endblock %}

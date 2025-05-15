@@ -1,0 +1,478 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - ChatBot{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>AI ChatBot</h2>
+        <a href="{{ url_for('main.dashboard') }}" class="btn-secondary">Torna alla Dashboard</a>
+    </div>
+    
+    <div class="dashboard-nav">
+        <ul>
+            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('match.matches') }}">Partite</a></li>
+            <li><a href="{{ url_for('match.statistics') }}">Statistiche</a></li>
+            <li><a href="{{ url_for('chatbot.chatbot_page') }}" class="active">ChatBot</a></li>
+        </ul>
+    </div>
+    
+    <div class="chatbot-container">
+        <div class="chatbot-sidebar">
+            <div class="chatbot-info">
+                <h4>SmartBetGPT Assistente</h4>
+                <p>Il nostro ChatBot è progettato per aiutarti con consigli personalizzati, analisi delle scommesse e molto altro.</p>
+            </div>
+            
+            <div class="model-selector">
+                <h4>Seleziona il modello AI:</h4>
+                <select id="model-select">
+                    {% for model in models %}
+                        <option value="{{ model.id }}" {% if model.id == default_model %}selected{% endif %}>{{ model.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="model-info">
+                    Scegli il modello AI che preferisci per generare le risposte.
+                </div>
+                <div id="current-model" class="current-model"></div>
+            </div>
+            
+            <div class="chat-topics">
+                <h4>Argomenti suggeriti</h4>
+                <ul class="topic-list">
+                    <li><a href="#" class="chat-topic" data-query="Quali sono le partite con le previsioni più affidabili per questo weekend?">Previsioni per il weekend</a></li>
+                    <li><a href="#" class="chat-topic" data-query="Mostrami la classifica della Serie A">Classifica Serie A</a></li>
+                    <li><a href="#" class="chat-topic" data-query="Qual è la migliore strategia per le scommesse sul calcio?">Strategie di scommessa</a></li>
+                    <li><a href="#" class="chat-topic" data-query="Analizza le prossime partite della Champions League">Champions League</a></li>
+                    <li><a href="#" class="chat-topic" data-query="Dammi consigli di scommessa per le partite di oggi">Consigli scommesse oggi</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="chatbot-main">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <img src="{{ url_for('static', filename='img/smartbetgpt.png') }}" alt="AI">
+                    </div>
+                    <div class="message-content">
+                        <p>Ciao {{ current_user.name }}, sono l'assistente SmartBetGPT! 👋</p>
+                        <p>Sono qui per aiutarti con consigli sulle scommesse, analisi delle partite e rispondere a qualsiasi domanda sul calcio. Ho accesso ai dati in tempo reale da Football-data.org per fornirti informazioni accurate.</p>
+                        <p>Come posso aiutarti oggi?</p>
+                        <span class="message-time">{{ now.strftime('%H:%M') }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <form id="chatForm">
+                    <input type="text" id="messageInput" placeholder="Chiedi informazioni sul calcio..." autocomplete="off">
+                    <button type="submit" class="btn-primary">
+                        <span id="send-text">Invia</span>
+                        <div class="spinner" id="spinner"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chatbot-container {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        height: 600px;
+    }
+    
+    .chatbot-sidebar {
+        flex: 0 0 300px;
+        background-color: var(--gray-light);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chatbot-info {
+        margin-bottom: 2rem;
+    }
+    
+    .chatbot-info h4 {
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Model selector styles */
+    .model-selector {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--gray-medium);
+    }
+    
+    .model-selector h4 {
+        color: var(--secondary-color);
+        margin-bottom: 0.8rem;
+    }
+    
+    .model-selector select {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid var(--gray-medium);
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .model-info {
+        font-size: 0.8rem;
+        color: var(--gray-dark);
+    }
+    
+    .current-model {
+        margin-top: 0.8rem;
+        font-size: 0.8rem;
+        color: var(--primary-color);
+        font-style: italic;
+    }
+    
+    .chat-topics h4 {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .topic-list {
+        overflow-y: auto;
+        max-height: 200px;
+    }
+    
+    .chat-topics ul li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .chat-topics ul li a {
+        color: var(--primary-color);
+        display: block;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: all 0.2s ease;
+    }
+    
+    .chat-topics ul li a:hover {
+        background-color: var(--gray-medium);
+    }
+    
+    .chatbot-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .message {
+        display: flex;
+        gap: 1rem;
+        max-width: 80%;
+    }
+    
+    .bot-message {
+        align-self: flex-start;
+    }
+    
+    .user-message {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+    }
+    
+    .message-avatar {
+        flex: 0 0 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--secondary-color);
+        color: white;
+        font-weight: bold;
+        overflow: hidden;
+    }
+    
+    .message-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .message-content {
+        background-color: var(--gray-light);
+        padding: 0.8rem 1rem;
+        border-radius: 1rem;
+        position: relative;
+    }
+    
+    .bot-message .message-content {
+        border-top-left-radius: 0;
+    }
+    
+    .user-message .message-content {
+        background-color: var(--primary-light);
+        color: white;
+        border-top-right-radius: 0;
+    }
+    
+    .message-time {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--gray-dark);
+        margin-top: 0.3rem;
+    }
+    
+    .user-message .message-time {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .message-content p {
+        margin-bottom: 0.5rem;
+    }
+    
+    .message-content p:last-child {
+        margin-bottom: 0;
+    }
+    
+    .message-content ul {
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .message-content ul li {
+        list-style-type: disc;
+    }
+    
+    .chat-input {
+        padding: 1rem;
+        border-top: 1px solid var(--gray-medium);
+    }
+    
+    .chat-input form {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .chat-input input {
+        flex: 1;
+        padding: 0.8rem 1rem;
+        border: 1px solid var(--gray-medium);
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+    }
+    
+    .chat-input input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+    
+    .chat-input button {
+        padding: 0.8rem 1.5rem;
+        position: relative;
+    }
+    
+    /* Spinner for loading state */
+    .spinner {
+        display: none;
+        width: 16px;
+        height: 16px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease infinite;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    @keyframes spin {
+        to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    
+    /* Match info style for football data */
+    .match-info {
+        background-color: #f0f8ff;
+        border-radius: 8px;
+        padding: 0.8rem;
+        margin-top: 0.5rem;
+        border-left: 3px solid var(--primary-color);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const modelSelect = document.getElementById('model-select');
+        const currentModelDisplay = document.getElementById('current-model');
+        const spinner = document.getElementById('spinner');
+        const sendText = document.getElementById('send-text');
+        const topicLinks = document.querySelectorAll('.chat-topic');
+        
+        // Click event for suggested topics
+        topicLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const query = this.getAttribute('data-query');
+                if (query) {
+                    messageInput.value = query;
+                    chatForm.dispatchEvent(new Event('submit'));
+                }
+            });
+        });
+        
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addUserMessage(message);
+            
+            // Show loading state
+            spinner.style.display = 'block';
+            sendText.style.visibility = 'hidden';
+            messageInput.disabled = true;
+            
+            try {
+                const selectedModel = modelSelect.value;
+                
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: message,
+                        model: selectedModel
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Add AI response to chat
+                    addBotMessage(data.response);
+                    
+                    // Show model information
+                    const modelName = modelSelect.options[modelSelect.selectedIndex].text;
+                    currentModelDisplay.textContent = `Risposta generata usando: ${modelName}`;
+                    currentModelDisplay.style.display = 'block';
+                } else {
+                    // Add error message
+                    addBotMessage(`Si è verificato un errore: ${data.error || 'Impossibile ottenere una risposta'}`);
+                }
+            } catch (error) {
+                addBotMessage(`Errore: ${error.message || 'Si è verificato un problema nella comunicazione con il server'}`);
+            } finally {
+                // Hide loading state
+                spinner.style.display = 'none';
+                sendText.style.visibility = 'visible';
+                messageInput.disabled = false;
+                
+                // Reset input and focus
+                messageInput.value = '';
+                messageInput.focus();
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        });
+        
+        function addUserMessage(text) {
+            const now = new Date();
+            const time = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <p>${escapeHtml(text)}</p>
+                    <span class="message-time">${time}</span>
+                </div>
+                <div class="message-avatar">
+                    <span>{{ current_user.name[0] }}</span>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addBotMessage(text) {
+            const now = new Date();
+            const time = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+            
+            // Process text for better display (convert markdown-like elements, support for lists, etc.)
+            text = processMessageText(text);
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <img src="{{ url_for('static', filename='img/smartbetgpt.png') }}" alt="AI">
+                </div>
+                <div class="message-content">
+                    ${text}
+                    <span class="message-time">${time}</span>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+        }
+        
+        // Helper function to escape HTML
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Process text to handle markdown and other formatting
+        function processMessageText(text) {
+            // Handle paragraphs
+            let processed = text.split('\n\n').map(para => `<p>${para}</p>`).join('');
+            
+            // Replace single line breaks with <br>
+            processed = processed.replace(/\n/g, '<br>');
+            
+            // Handle bold text
+            processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Handle italic text
+            processed = processed.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Handle lists - this is a simplified version
+            processed = processed.replace(/- (.*?)(?=<br>|<\/p>|$)/g, '<li>$1</li>');
+            processed = processed.replace(/<li>(.*?)<\/li>/g, '<ul><li>$1</li></ul>');
+            
+            return processed;
+        }
+    });
+</script>
+{% endblock %}

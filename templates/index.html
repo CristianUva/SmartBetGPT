@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Scommesse Intelligenti con IA{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h2>Scommesse più intelligenti <span class="highlight">con l'Intelligenza Artificiale</span></h2>
+            <p>SmartBetGPT rivoluziona il modo di scommettere, utilizzando algoritmi avanzati di intelligenza artificiale per analizzare dati sportivi e suggerire le migliori opportunità di scommessa.</p>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.dashboard') }}" class="btn-primary">Inizia Ora</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn-primary">Inizia Ora</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="hero-features">
+        <div class="hero-feature">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('match.matches') }}" class="hero-feature-link">
+                <img src="{{ url_for('static', filename='img/logo_partite.png') }}" alt="Partite" class="hero-feature-logo">
+                <h4>Partite</h4>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="hero-feature-link">
+                <img src="{{ url_for('static', filename='img/logo_partite.png') }}" alt="Partite" class="hero-feature-logo">
+                <h4>Partite</h4>
+            </a>
+            {% endif %}
+        </div>
+        <div class="hero-feature">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('match.statistics') }}" class="hero-feature-link">
+                <img src="{{ url_for('static', filename='img/logo_statistiche.png') }}" alt="Statistiche" class="hero-feature-logo">
+                <h4>Statistiche</h4>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="hero-feature-link">
+                <img src="{{ url_for('static', filename='img/logo_statistiche.png') }}" alt="Statistiche" class="hero-feature-logo">
+                <h4>Statistiche</h4>
+            </a>
+            {% endif %}
+        </div>
+        <div class="hero-feature">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('chatbot.chatbot_page') }}" class="hero-feature-link">
+                <img src="{{ url_for('static', filename='img/logo_chatbot.png') }}" alt="ChatBot" class="hero-feature-logo">
+                <h4>ChatBot</h4>
+            </a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="hero-feature-link">
+                <img src="{{ url_for('static', filename='img/logo_chatbot.png') }}" alt="ChatBot" class="hero-feature-logo">
+                <h4>ChatBot</h4>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section id="features" class="features">
+    <h2>Cosa Offriamo</h2>
+    <div class="feature-cards">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='img/smartbetgpt.png') }}" alt="Analisi IA" class="feature-img">
+            </div>
+            <h3>Analisi IA</h3>
+            <p>Algoritmi avanzati che analizzano migliaia di partite e statistiche in tempo reale</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='img/previsioni_precise.png') }}" alt="Previsioni Precise" class="feature-img">
+            </div>
+            <h3>Previsioni Precise</h3>
+            <p>Suggerimenti di scommessa basati su modelli matematici e machine learning</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='img/discord.png') }}" alt="Community" class="feature-img">
+            </div>
+            <h3>Community</h3>
+            <p>Condividi strategie e confronta i risultati con altri appassionati sul nostro <a href="https://discord.gg/4DgKWUFBet" target="_blank" class="discord-link">server Discord</a></p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='img/sempre_con_te.png') }}" alt="Sempre con te" class="feature-img">
+            </div>
+            <h3>Sempre con te</h3>
+            <p>Accedi da qualsiasi dispositivo, in qualsiasi momento</p>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="about">
+    <div class="about-content">
+        <section id="chi-siamo">
+            <h2>Chi Siamo</h2>
+            <p>
+              SmartBetGPT è un progetto indipendente, ideato e sviluppato interamente da un ragazzo di 19 anni con una forte passione per l’intelligenza artificiale e le scommesse sportive. 
+              Nato come progetto di quinta superiore, è il frutto di anni di studio, programmazione e sperimentazione individuale.
+            </p>
+            <p>
+              Alle spalle di questo lavoro c’è l’esperienza maturata come libero professionista su Fiverr, dove ho avuto modo di confrontarmi con clienti da tutto il mondo 
+              e affinare le mie competenze in ambito tecnologico e analitico.
+            </p>
+            <p>
+              SmartBetGPT rappresenta il punto d’incontro tra passione, autodidattica e spirito imprenditoriale: un sistema pensato per rendere le scommesse più intelligenti, informate e responsabili, 
+              grazie ad algoritmi capaci di analizzare dati sportivi e identificare le opportunità più promettenti.
+            </p>
+          </section>
+            </div>
+    <div class="about-image">
+        <div class="team-image-placeholder">
+            <div class="team-member"></div>
+            <div class="team-member"></div>
+            <div class="team-member"></div>
+            <div class="team-member"></div>
+            <div class="team-member"></div>
+        </div>
+    </div>
+</section>
+
+<section id="ai" class="ai-section">
+    <h2>Intelligenza Artificiale Avanzata con OpenRouter</h2>
+    
+    <div class="ai-logo-container">
+        <img src="{{ url_for('static', filename='img/smartbetgpt.png') }}" alt="SmartBetGPT AI" class="ai-logo">
+    </div>
+    
+    <div class="ai-description">
+        <p>SmartBetGPT sfrutta la potenza di OpenRouter per accedere ai migliori modelli di intelligenza artificiale disponibili sul mercato, garantendo pronostici sempre aggiornati e affidabili.</p>
+        
+        <ul class="ai-features-list">
+            <li>
+                <strong>Accesso Multi-Modello:</strong> 
+                <span>Utilizziamo i più avanzati modelli AI come Claude 3, GPT-4 Turbo, Gemini e altri per analizzare i dati sportivi</span>
+            </li>
+            <li>
+                <strong>Aggiornamenti Costanti:</strong> 
+                <span>OpenRouter ci permette di accedere sempre alla versione più recente dei modelli AI senza interruzioni di servizio</span>
+            </li>
+            <li>
+                <strong>Specializzazione Sportiva:</strong> 
+                <span>Forniamo prompt specifici e dati contestuali che ottimizzano le capacità dell'AI per il mondo delle scommesse</span>
+            </li>
+            <li>
+                <strong>Affidabilità Superiore:</strong> 
+                <span>Il confronto tra diversi modelli AI garantisce maggiore precisione nelle previsioni</span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<section id="discord" class="discord-section">
+    <h2>Unisciti alla nostra Community Discord</h2>
+    
+    <div class="discord-logo-container">
+        <img src="{{ url_for('static', filename='img/discord.png') }}" alt="Discord Community" class="discord-logo">
+    </div>
+    
+    <div class="discord-description">
+        <p>Il nostro server Discord è il punto d'incontro per tutti gli appassionati di scommesse sportive che vogliono condividere strategie, analisi e discutere delle ultime previsioni.</p>
+        
+        <ul class="discord-features-list">
+            <li>Analisi e pronostici in tempo reale</li>
+            <li>Chat dedicate per ogni campionato</li>
+            <li>Community di esperti e appassionati</li>
+            <li>Bot esclusivi per statistiche e quote</li>
+            <li>Contest e classifiche settimanali</li>
+        </ul>
+        
+        <div class="discord-button-container">
+            <a href="https://discord.gg/4DgKWUFBet" target="_blank" class="btn-discord">
+                Unisciti Ora
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h2>Pronto a Scommettere in Modo Intelligente?</h2>
+    <p>Unisciti a migliaia di utenti che hanno già migliorato i loro risultati con SmartBetGPT</p>
+    <a href="{{ url_for('auth.register') }}" class="btn-primary">Registrati Ora</a>
+</section>
+{% endblock %}

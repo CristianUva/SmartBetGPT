@@ -1,0 +1,16 @@
+Messaggio Ricevuto
+
+Gentile {{ name }},
+
+Grazie per averci contattato. Abbiamo ricevuto il tuo messaggio e lo valuteremo al più presto.
+
+Ti risponderemo entro 24-48 ore lavorative.
+
+Nel frattempo, se hai bisogno di assistenza immediata, puoi visitare la nostra sezione FAQ sul sito web.
+
+Cordiali saluti,
+Il Team di Sistema di Registrazione
+
+---
+Questa è un'email automatica, ti preghiamo di non rispondere.
+© {{ now.year }} Sistema di Registrazione - Tutti i diritti riservati

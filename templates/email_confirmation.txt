@@ -1,0 +1,10 @@
+Ciao {{ name }},
+
+Grazie per esserti registrato su SmartBetGPT!
+Per completare la registrazione e verificare il tuo indirizzo email, visita il seguente link:
+{{ confirmation_url }}
+
+Se non sei stato tu a registrarti su SmartBetGPT, ignora questa email.
+
+Grazie,
+Il team di SmartBetGPT

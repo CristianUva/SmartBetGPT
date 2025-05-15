@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Registrazione{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <img src="{{ url_for('static', filename='img/smartbetgpt.png') }}" alt="SmartBetGPT Logo">
+        <h2>Registrazione</h2>
+    </div>
+
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", placeholder="Il tuo nome completo") }}
+            {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", placeholder="La tua email") }}
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder="Scegli una password sicura") }}
+            {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.confirm_password.label(class="form-label") }}
+            {{ form.confirm_password(class="form-control", placeholder="Ripeti la password") }}
+            {% if form.confirm_password.errors %}
+                {% for error in form.confirm_password.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group checkbox-container">
+            <div class="checkbox-wrapper">
+                {{ form.terms(id="terms") }}
+                <label for="terms">Accetto i <a href="{{ url_for('main.legal', _anchor='terms') }}">Termini e Condizioni</a></label>
+                {% if form.terms.errors %}
+                    {% for error in form.terms.errors %}
+                        <span class="text-danger d-block">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="form-group checkbox-container">
+            <div class="checkbox-wrapper">
+                {{ form.age(id="age") }}
+                <label for="age">Dichiaro di avere 18 o più anni</label>
+                {% if form.age.errors %}
+                    {% for error in form.age.errors %}
+                        <span class="text-danger d-block">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        
+        <div class="form-group">
+            {{ form.submit(class="btn-primary btn-full") }}
+        </div>
+    </form>
+    
+    <div class="form-footer">
+        <p>Hai già un account? <a href="{{ url_for('auth.login') }}">Accedi</a></p>
+    </div>
+</div>
+
+<!-- Script per la validazione dei checkbox -->
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

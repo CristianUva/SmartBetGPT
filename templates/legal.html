@@ -1,0 +1,456 @@
+{% extends "layout.html" %}
+
+{% block title %}Informazioni Legali - SmartBetGPT{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="terms">Termini e Condizioni</button>
+        <button class="tab-btn" data-tab="privacy">Privacy Policy</button>
+        <button class="tab-btn" data-tab="cookie">Cookie Policy</button>
+        <button class="tab-btn" data-tab="licenses">Licenze</button>
+    </div>
+
+    <div class="tab-content active" id="terms">
+        <h1>Termini e Condizioni</h1>
+        <p>Ultimo aggiornamento: 15 maggio 2025</p>
+        
+        <h2>1. Introduzione</h2>
+        <p>Benvenuti su SmartBetGPT ("noi", "nostro", "la piattaforma"). Utilizzando il nostro sito web e i nostri servizi, accetti i seguenti termini e condizioni. Ti preghiamo di leggerli attentamente.</p>
+        
+        <h2>2. Definizioni</h2>
+        <p>"Utente", "Tu" o "Tuo" si riferisce alla persona che accede a questa piattaforma e accetta questi termini e condizioni.</p>
+        <p>"Contenuti" si riferisce a tutti i dati, testi, immagini, video, statistiche e informazioni presenti sulla piattaforma.</p>
+        
+        <h2>3. Uso del servizio</h2>
+        <p>3.1. L'accesso a SmartBetGPT è consentito solo a persone di età superiore ai 18 anni.</p>
+        <p>3.2. L'utente è responsabile di mantenere la riservatezza delle proprie credenziali di accesso.</p>
+        <p>3.3. L'utente accetta di non utilizzare la piattaforma per scopi illegali o proibiti dai presenti termini.</p>
+        
+        <h2>4. Registrazione e Account</h2>
+        <p>4.1. Per utilizzare alcune funzionalità della piattaforma, potrebbe essere necessario registrarsi e creare un account.</p>
+        <p>4.2. L'utente garantisce che le informazioni fornite durante la registrazione siano accurate, complete e aggiornate.</p>
+        <p>4.3. Ci riserviamo il diritto di sospendere o terminare gli account che violano i nostri termini.</p>
+        
+        <h2>5. Contenuti e Previsioni</h2>
+        <p>5.1. SmartBetGPT fornisce previsioni e analisi basate su algoritmi di intelligenza artificiale e dati disponibili pubblicamente.</p>
+        <p>5.2. Le previsioni sono fornite solo a scopo informativo e non costituiscono una garanzia di risultati.</p>
+        <p>5.3. Non siamo responsabili per perdite finanziarie derivanti dall'uso delle nostre previsioni o analisi.</p>
+        
+        <h2>6. Gioco Responsabile</h2>
+        <p>6.1. SmartBetGPT promuove il gioco responsabile e scoraggia l'uso eccessivo di servizi di scommesse.</p>
+        <p>6.2. L'utente riconosce che le scommesse comportano rischi e che è sua responsabilità gestire il proprio comportamento di gioco.</p>
+        <p>6.3. Forniamo strumenti e risorse per aiutare gli utenti a mantenere il controllo sulle proprie attività di scommessa.</p>
+        
+        <h2>7. Proprietà Intellettuale</h2>
+        <p>7.1. Tutti i contenuti presenti sulla piattaforma, inclusi loghi, testo, grafica e software, sono protetti da copyright e altre leggi sulla proprietà intellettuale.</p>
+        <p>7.2. È vietato copiare, modificare, distribuire o utilizzare commercialmente qualsiasi parte della piattaforma senza il nostro consenso scritto.</p>
+        
+        <h2>8. Limitazione di Responsabilità</h2>
+        <p>8.1. SmartBetGPT è fornito "così com'è" e "come disponibile", senza garanzie di alcun tipo.</p>
+        <p>8.2. Non garantiamo che la piattaforma sarà sempre disponibile, priva di errori o sicura.</p>
+        <p>8.3. In nessun caso saremo responsabili per danni indiretti, incidentali o consequenziali derivanti dall'uso della piattaforma.</p>
+        
+        <h2>9. Modifiche ai Termini</h2>
+        <p>Ci riserviamo il diritto di modificare questi termini in qualsiasi momento. Le modifiche avranno effetto immediato dopo la pubblicazione sulla piattaforma. L'uso continuato della piattaforma costituisce accettazione dei nuovi termini.</p>
+        
+        <h2>10. Legge Applicabile</h2>
+        <p>Questi termini sono regolati e interpretati in conformità con le leggi italiane, senza riguardo ai suoi principi di conflitto di leggi.</p>
+    </div>
+
+    <div class="tab-content" id="privacy">
+        <h1>Privacy Policy</h1>
+        <p>Ultimo aggiornamento: 15 maggio 2025</p>
+        
+        <h2>1. Introduzione</h2>
+        <p>SmartBetGPT rispetta la tua privacy e si impegna a proteggere i tuoi dati personali. Questa privacy policy ti informa su come raccogliamo, utilizziamo e proteggiamo le tue informazioni personali quando utilizzi la nostra piattaforma.</p>
+        
+        <h2>2. Dati che Raccogliamo</h2>
+        <p>2.1. <strong>Dati di registrazione:</strong> nome, indirizzo email, password criptata.</p>
+        <p>2.2. <strong>Dati di utilizzo:</strong> informazioni su come interagisci con la piattaforma, preferenze, cronologia di navigazione.</p>
+        <p>2.3. <strong>Dati tecnici:</strong> indirizzo IP, tipo di browser, dispositivo utilizzato, sistema operativo.</p>
+        <p>2.4. <strong>Comunicazioni:</strong> messaggi che invii attraverso i nostri moduli di contatto.</p>
+        
+        <h2>3. Come Utilizziamo i Tuoi Dati</h2>
+        <p>3.1. Per fornire e migliorare i nostri servizi.</p>
+        <p>3.2. Per personalizzare la tua esperienza sulla piattaforma.</p>
+        <p>3.3. Per comunicare con te e rispondere alle tue richieste.</p>
+        <p>3.4. Per inviarti notifiche e aggiornamenti relativi al servizio (se hai acconsentito).</p>
+        <p>3.5. Per garantire la sicurezza della piattaforma e prevenire frodi.</p>
+        
+        <h2>4. Base Giuridica per il Trattamento</h2>
+        <p>4.1. Esecuzione del contratto: per fornirti i nostri servizi.</p>
+        <p>4.2. Consenso: quando hai espressamente acconsentito al trattamento dei tuoi dati.</p>
+        <p>4.3. Interessi legittimi: per migliorare i nostri servizi e proteggere la piattaforma.</p>
+        <p>4.4. Obblighi legali: quando siamo tenuti a farlo per legge.</p>
+        
+        <h2>5. Condivisione dei Dati</h2>
+        <p>5.1. Non vendiamo, affittiamo o divulghiamo le tue informazioni personali a terzi senza il tuo consenso, eccetto:</p>
+        <p>- Con fornitori di servizi che ci aiutano a fornire i nostri servizi (es. hosting, email).</p>
+        <p>- Se richiesto dalla legge o per proteggere i nostri diritti legali.</p>
+        <p>- In caso di fusione, acquisizione o vendita degli asset della società.</p>
+        
+        <h2>6. Sicurezza dei Dati</h2>
+        <p>Adottiamo misure di sicurezza tecniche e organizzative appropriate per proteggere i tuoi dati personali da accessi non autorizzati, perdite o alterazioni. Tuttavia, nessun sistema online è completamente sicuro e non possiamo garantire la sicurezza assoluta dei tuoi dati.</p>
+        
+        <h2>7. Conservazione dei Dati</h2>
+        <p>Conserviamo i tuoi dati personali solo per il tempo necessario agli scopi indicati in questa privacy policy o come richiesto dalla legge applicabile. Quando i dati non sono più necessari, li eliminiamo o li rendiamo anonimi.</p>
+        
+        <h2>8. I Tuoi Diritti</h2>
+        <p>In base alla normativa applicabile, potresti avere i seguenti diritti:</p>
+        <p>- Accesso: richiedere una copia dei tuoi dati personali.</p>
+        <p>- Rettifica: correggere informazioni inesatte o incomplete.</p>
+        <p>- Cancellazione: richiedere l'eliminazione dei tuoi dati in determinate circostanze.</p>
+        <p>- Limitazione: limitare il trattamento dei tuoi dati in determinate circostanze.</p>
+        <p>- Portabilità dei dati: ricevere i tuoi dati in un formato strutturato.</p>
+        <p>- Opposizione: opporti al trattamento basato su interessi legittimi.</p>
+        <p>Per esercitare i tuoi diritti, contattaci all'indirizzo email indicato di seguito.</p>
+        
+        <h2>9. Contattaci</h2>
+        <p>Per qualsiasi domanda relativa a questa privacy policy o al trattamento dei tuoi dati, puoi contattarci a:</p>
+        <p>Email: privacy@smartbetgpt.com</p>
+    </div>
+
+    <div class="tab-content" id="cookie">
+        <h1>Cookie Policy</h1>
+        <p>Ultimo aggiornamento: 15 maggio 2025</p>
+        
+        <h2>1. Cosa sono i Cookie?</h2>
+        <p>I cookie sono piccoli file di testo che vengono memorizzati sul tuo dispositivo quando visiti il nostro sito web. Questi file contengono informazioni che vengono utilizzate per migliorare la tua esperienza sul sito.</p>
+        
+        <h2>2. Come Utilizziamo i Cookie</h2>
+        <p>Il nostro sito web utilizza cookie per vari scopi, tra cui:</p>
+        <p>2.1. <strong>Cookie necessari:</strong> essenziali per il funzionamento del sito web e per consentirti di utilizzare le sue funzionalità. Non possono essere disattivati.</p>
+        <p>2.2. <strong>Cookie funzionali:</strong> ci consentono di ricordare le tue preferenze e personalizzare la tua esperienza.</p>
+        <p>2.3. <strong>Cookie analitici:</strong> ci aiutano a capire come gli utenti interagiscono con il nostro sito, consentendoci di migliorarlo.</p>
+        <p>2.4. <strong>Cookie di marketing:</strong> utilizzati per tracciare i visitatori sui siti web e mostrare annunci pertinenti.</p>
+        
+        <h2>3. Tipi di Cookie</h2>
+        <p>3.1. <strong>Cookie di sessione:</strong> temporanei e vengono eliminati quando chiudi il browser.</p>
+        <p>3.2. <strong>Cookie persistenti:</strong> rimangono sul tuo dispositivo fino alla loro scadenza o finché non li elimini manualmente.</p>
+        <p>3.3. <strong>Cookie proprietari:</strong> impostati dal nostro sito web.</p>
+        <p>3.4. <strong>Cookie di terze parti:</strong> impostati da domini diversi dal nostro.</p>
+        
+        <h2>4. Cookie Specifici Utilizzati</h2>
+        <table>
+            <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Scopo</th>
+                <th>Durata</th>
+            </tr>
+            <tr>
+                <td>session</td>
+                <td>Necessario</td>
+                <td>Gestisce la sessione dell'utente</td>
+                <td>Sessione</td>
+            </tr>
+            <tr>
+                <td>csrf_token</td>
+                <td>Necessario</td>
+                <td>Protegge contro attacchi CSRF</td>
+                <td>Sessione</td>
+            </tr>
+            <tr>
+                <td>remember_token</td>
+                <td>Funzionale</td>
+                <td>Mantiene l'utente connesso</td>
+                <td>30 giorni</td>
+            </tr>
+            <tr>
+                <td>theme_preference</td>
+                <td>Funzionale</td>
+                <td>Salva le preferenze di tema dell'utente</td>
+                <td>1 anno</td>
+            </tr>
+            <tr>
+                <td>_ga</td>
+                <td>Analitico</td>
+                <td>Google Analytics - distingue gli utenti</td>
+                <td>2 anni</td>
+            </tr>
+        </table>
+        
+        <h2>5. Come Gestire i Cookie</h2>
+        <p>Puoi controllare e gestire i cookie in diversi modi. La maggior parte dei browser ti consente di:</p>
+        <p>- Visualizzare i cookie memorizzati</p>
+        <p>- Consentire o bloccare i cookie</p>
+        <p>- Eliminare tutti o alcuni cookie</p>
+        <p>Le impostazioni si trovano generalmente nel menu "Opzioni", "Strumenti" o "Preferenze" del tuo browser. Per ulteriori informazioni, consulta la guida del tuo browser.</p>
+        <p>Tieni presente che bloccare alcuni cookie potrebbe impedire il corretto funzionamento di alcune parti del nostro sito web.</p>
+        
+        <h2>6. Modifiche alla Cookie Policy</h2>
+        <p>Ci riserviamo il diritto di modificare questa cookie policy in qualsiasi momento. Le modifiche avranno effetto immediato dopo la pubblicazione sul sito web. Ti incoraggiamo a rivedere periodicamente questa policy per rimanere informato su come utilizziamo i cookie.</p>
+    </div>
+
+    <div class="tab-content" id="licenses">
+        <h1>Licenze Software</h1>
+        <p>SmartBetGPT utilizza vari software open source. Di seguito sono elencate le licenze dei principali componenti utilizzati nella nostra piattaforma.</p>
+        
+        <h2>1. Framework e Librerie Python</h2>
+        <div class="license-item">
+            <h3>Flask</h3>
+            <p><strong>Licenza:</strong> BSD-3-Clause</p>
+            <p><strong>Copyright:</strong> © 2010 Pallets</p>
+            <p><a href="https://flask.palletsprojects.com" target="_blank">https://flask.palletsprojects.com</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>SQLAlchemy</h3>
+            <p><strong>Licenza:</strong> MIT</p>
+            <p><strong>Copyright:</strong> © 2005-2023 SQLAlchemy authors and contributors</p>
+            <p><a href="https://www.sqlalchemy.org" target="_blank">https://www.sqlalchemy.org</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Flask-Login</h3>
+            <p><strong>Licenza:</strong> MIT</p>
+            <p><strong>Copyright:</strong> © 2011 Matthew Frazier</p>
+            <p><a href="https://github.com/maxcountryman/flask-login" target="_blank">https://github.com/maxcountryman/flask-login</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Flask-WTF</h3>
+            <p><strong>Licenza:</strong> BSD-3-Clause</p>
+            <p><strong>Copyright:</strong> © 2010 Dan Jacob, © 2013 Hsiaoming Yang</p>
+            <p><a href="https://github.com/wtforms/flask-wtf" target="_blank">https://github.com/wtforms/flask-wtf</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Flask-Mail</h3>
+            <p><strong>Licenza:</strong> BSD</p>
+            <p><strong>Copyright:</strong> © 2010-2019 Matt Wright</p>
+            <p><a href="https://github.com/mattupstate/flask-mail" target="_blank">https://github.com/mattupstate/flask-mail</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Requests</h3>
+            <p><strong>Licenza:</strong> Apache-2.0</p>
+            <p><strong>Copyright:</strong> © 2019 Kenneth Reitz</p>
+            <p><a href="https://requests.readthedocs.io" target="_blank">https://requests.readthedocs.io</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Werkzeug</h3>
+            <p><strong>Licenza:</strong> BSD-3-Clause</p>
+            <p><strong>Copyright:</strong> © 2007 Pallets</p>
+            <p><a href="https://werkzeug.palletsprojects.com" target="_blank">https://werkzeug.palletsprojects.com</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>python-dotenv</h3>
+            <p><strong>Licenza:</strong> BSD-3-Clause</p>
+            <p><strong>Copyright:</strong> © 2014-2023 Saurabh Kumar</p>
+            <p><a href="https://github.com/theskumar/python-dotenv" target="_blank">https://github.com/theskumar/python-dotenv</a></p>
+        </div>
+        
+        <h2>2. API esterne</h2>
+        <div class="license-item">
+            <h3>OpenRouter API</h3>
+            <p>L'utilizzo di OpenRouter API è soggetto ai termini e condizioni specificati da OpenRouter.</p>
+            <p><a href="https://openrouter.ai/terms" target="_blank">https://openrouter.ai/terms</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Football-data.org API</h3>
+            <p>L'utilizzo di Football-data.org API è soggetto ai termini e condizioni specificati da Football-data.org.</p>
+            <p><a href="https://www.football-data.org/terms" target="_blank">https://www.football-data.org/terms</a></p>
+        </div>
+        
+        <h2>3. Asset e Risorse Frontend</h2>
+        <div class="license-item">
+            <h3>Font Awesome</h3>
+            <p><strong>Licenza:</strong> Font Awesome Free License</p>
+            <p><a href="https://fontawesome.com/license/free" target="_blank">https://fontawesome.com/license/free</a></p>
+        </div>
+        
+        <div class="license-item">
+            <h3>Google Fonts - Montserrat</h3>
+            <p><strong>Licenza:</strong> SIL Open Font License (OFL)</p>
+            <p><a href="https://fonts.google.com/specimen/Montserrat#license" target="_blank">https://fonts.google.com/specimen/Montserrat#license</a></p>
+        </div>
+        
+        <h2>4. Licenza SmartBetGPT</h2>
+        <p>© 2025 SmartBetGPT. Tutti i diritti riservati.</p>
+        <p>L'applicazione SmartBetGPT e il suo contenuto originale sono protetti da copyright. L'utilizzo non autorizzato dell'applicazione o del suo contenuto è vietato.</p>
+    </div>
+</div>
+
+<style>
+.legal-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s;
+}
+
+.tab-btn:hover {
+    color: #1e88e5;
+}
+
+.tab-btn.active {
+    color: #1e88e5;
+    border-bottom: 2px solid #1e88e5;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h1 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.tab-content h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.tab-content p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.tab-content ul, .tab-content ol {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.tab-content li {
+    margin-bottom: 10px;
+}
+
+.license-item {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.license-item h3 {
+    margin-bottom: 5px;
+    color: #1e88e5;
+}
+
+.license-item p {
+    margin-bottom: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #f5f5f5;
+}
+
+@media (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        text-align: left;
+        padding: 15px 20px;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    function activateTab(tabId) {
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        // Add active class to the selected button
+        const selectedButton = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+        if (selectedButton) {
+            selectedButton.classList.add('active');
+            
+            // Show the corresponding content
+            const contentElement = document.getElementById(tabId);
+            if (contentElement) {
+                contentElement.classList.add('active');
+                
+                // Scroll to top of the page
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }
+    
+    // Handle tab button clicks
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            // Update URL hash without triggering page reload
+            history.replaceState(null, null, `#${tabId}`);
+            activateTab(tabId);
+        });
+    });
+    
+    // Handle hash changes for navigation within the page
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            activateTab(hash);
+        }
+    });
+    
+    // Check if there's a hash in the URL on page load
+    if (window.location.hash) {
+        const hash = window.location.hash.substring(1); // Remove the # symbol
+        // Piccolo ritardo per assicurare che il DOM sia completamente caricato
+        setTimeout(() => {
+            activateTab(hash);
+        }, 50);
+    } else {
+        // Default to first tab if no hash
+        const firstTabId = tabButtons[0].getAttribute('data-tab');
+        activateTab(firstTabId);
+    }
+});
+</script>
+{% endblock %}

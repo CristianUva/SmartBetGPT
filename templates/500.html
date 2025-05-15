@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}Errore del server - Sistema di Registrazione{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-1">500</h1>
+    <p class="lead">Errore interno del server</p>
+    <p>Si è verificato un problema durante l'elaborazione della tua richiesta. Riprova più tardi.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary">Torna alla Home</a>
+</div>
+{% endblock %}

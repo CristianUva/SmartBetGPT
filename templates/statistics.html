@@ -1,0 +1,517 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Statistiche{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Statistiche Partite</h2>
+        <a href="{{ url_for('main.dashboard') }}" class="btn-secondary">Torna alla Dashboard</a>
+    </div>
+    
+    <div class="dashboard-nav">
+        <ul>
+            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('match.matches') }}">Partite</a></li>
+            <li><a href="{{ url_for('match.statistics') }}" class="active">Statistiche</a></li>
+            <li><a href="{{ url_for('chatbot.chatbot_page') }}">ChatBot</a></li>
+        </ul>
+    </div>
+    
+    <div class="filters-container">
+        <h3 class="filters-title">Filtra Partite</h3>
+        <form method="get" action="{{ url_for('match.statistics') }}" id="filtersForm" class="filters-form">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="days">Ultimi giorni:</label>
+                    <select name="days" id="days" class="form-select">
+                        <option value="1" {% if days == 1 %}selected{% endif %}>Oggi</option>
+                        <option value="3" {% if days == 3 %}selected{% endif %}>3 giorni</option>
+                        <option value="7" {% if days == 7 %}selected{% endif %}>7 giorni</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group competition-filter">
+                    <label for="competitions">Competizioni:</label>
+                    <div class="select-wrapper">
+                        <select name="competitions" id="competitions" multiple size="5" class="form-select">
+                            {% for comp in competitions %}
+                            <option value="{{ comp.id }}" {% if comp.id|string in selected_competitions %}selected{% endif %}>
+                                {% if comp.country %}{{ comp.country }}: {% endif %}{{ comp.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-actions">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-filter"></i> Filtra
+                </button>
+                <a href="{{ url_for('match.statistics') }}" class="btn-secondary">
+                    <i class="fas fa-undo"></i> Reset
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="matches-container">
+        <h3>Partite Terminate Recenti</h3>
+        
+        {% if grouped_matches %}
+            {% for date_group in grouped_matches %}
+                <div class="date-group">
+                    <h4 class="date-heading">{{ date_group.display_date }}</h4>
+                    <div class="matches-list">
+                        {% for match in date_group.matches %}
+                            <div class="match-card">
+                                <div class="match-header">
+                                    <div class="header-content">
+                                        <div class="competition-line">
+                                            {% if match.competition.emblem %}
+                                            <img src="{{ match.competition.emblem }}" alt="{{ match.competition.name }}" class="competition-logo">
+                                            {% endif %}
+                                            {{ match.competition.name }}
+                                        </div>
+                                        <div class="date-line">
+                                            {{ match.localDate|default(match.utcDate|default('-'), true) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="match-teams">
+                                    <div class="team home-team">
+                                        {% if match.homeTeam.crest %}
+                                        <img src="{{ match.homeTeam.crest }}" alt="{{ match.homeTeam.name }}" class="team-logo">
+                                        {% endif %}
+                                        <span class="team-name">{{ match.homeTeam.name }}</span>
+                                    </div>
+                                    <div class="match-score">
+                                        <span class="score-home">{{ match.score.fullTime.home }}</span>
+                                        <span class="score-separator">-</span>
+                                        <span class="score-away">{{ match.score.fullTime.away }}</span>
+                                    </div>
+                                    <div class="team away-team">
+                                        {% if match.awayTeam.crest %}
+                                        <img src="{{ match.awayTeam.crest }}" alt="{{ match.awayTeam.name }}" class="team-logo">
+                                        {% endif %}
+                                        <span class="team-name">{{ match.awayTeam.name }}</span>
+                                    </div>
+                                </div>
+                                <div class="match-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Possesso</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-bar-home" style="width: 52%;">52%</div>
+                                            <div class="stat-bar-away" style="width: 48%;">48%</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Tiri totali</span>
+                                        <div class="stat-bar">
+                                            <div class="stat-bar-home" style="width: 60%;">12</div>
+                                            <div class="stat-bar-away" style="width: 40%;">8</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-matches">
+                <p>Nessuna partita trovata per i criteri selezionati.</p>
+                <p>Prova a modificare i filtri o a selezionare un periodo più ampio.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* Nuovi stili per il filtro migliorato */
+    .filters-container {
+        background: linear-gradient(135deg, #f8f8f8, #ffffff);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        border: 1px solid #eaeaea;
+    }
+    
+    .filters-title {
+        color: var(--secondary-color);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 0.7rem;
+    }
+    
+    .filters-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .filters-row {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .filter-group {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .competition-filter {
+        flex: 2;
+    }
+    
+    .filter-group label {
+        margin-bottom: 0.7rem;
+        font-weight: 500;
+        color: var(--secondary-color);
+        display: block;
+    }
+    
+    .form-select {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        background-color: white;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px;
+    }
+    
+    .form-select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(14, 110, 62, 0.1);
+    }
+    
+    .select-wrapper {
+        width: 100%;
+    }
+    
+    .filter-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+    }
+    
+    .filter-actions button, 
+    .filter-actions a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 10px 20px;
+    }
+    
+    .filter-actions .btn-primary {
+        background-color: var(--primary-color);
+    }
+    
+    .filter-actions .btn-secondary {
+        border: 1px solid var(--primary-color);
+    }
+
+    /* Stili esistenti per le partite */
+    .date-group {
+        margin-bottom: 2rem;
+    }
+    
+    .date-heading {
+        border-bottom: 1px solid var(--gray-medium);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+        color: var(--secondary-color);
+    }
+    
+    .matches-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .match-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .match-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.7rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: 64px; /* Altezza fissa come nell'esempio */
+        flex-wrap: wrap;
+    }
+    
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    
+    .competition-line {
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    
+    .competition-logo {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+        margin-right: 0.5rem;
+    }
+    
+    .date-line {
+        font-weight: 500;
+        margin-top: 0.2rem;
+    }
+    
+    .match-teams {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem 1rem;
+        border-bottom: 1px solid var(--gray-light);
+    }
+    
+    .team {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex: 1;
+    }
+    
+    .team-logo {
+        width: 55px;
+        height: 55px;
+        object-fit: contain;
+        margin-bottom: 0.8rem;
+    }
+    
+    .team-name {
+        font-weight: 500;
+        font-size: 0.9rem;
+        max-width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Stile per il nuovo formato di punteggio */
+    .match-score {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 10px;
+    }
+    
+    .score-home, .score-away {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    
+    .score-separator {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 8px;
+        color: var(--gray-dark);
+    }
+    
+    /* Aggiungo stile per i punteggi in linea */
+    .team-score-inline {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 10px;
+        color: var(--primary-color);
+    }
+    
+    .team-score {
+        position: absolute;
+        top: -15px;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    .vs {
+        margin: 0 1rem;
+        color: var(--gray-dark);
+        font-weight: bold;
+    }
+    
+    .match-prediction {
+        background-color: var(--secondary-light);
+        padding: 0.7rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .prediction-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .prediction-value {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .prediction-type {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 0.3rem 0.5rem;
+        border-radius: 3px;
+        font-weight: bold;
+    }
+    
+    .prediction-result {
+        font-weight: 500;
+    }
+    
+    .prediction-result.correct {
+        color: green;
+    }
+    
+    .prediction-result.incorrect {
+        color: red;
+    }
+    
+    .match-stats {
+        padding: 1rem;
+        border-bottom: 1px solid var(--gray-light);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .stat {
+        margin-bottom: 1rem;
+    }
+    
+    .stat:last-child {
+        margin-bottom: 0;
+    }
+    
+    .stat-label {
+        display: block;
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+        color: var(--gray-dark);
+    }
+    
+    .stat-bar {
+        display: flex;
+        height: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .stat-bar-home {
+        background-color: var(--primary-color);
+        color: white;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 20px;
+    }
+    
+    .stat-bar-away {
+        background-color: var(--secondary-color);
+        color: white;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 20px;
+    }
+    
+    .match-actions {
+        padding: 0.7rem 1rem;
+        text-align: center;
+    }
+    
+    .btn-details {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background-color: var(--gray-light);
+        color: var(--gray-dark);
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    
+    .btn-details:hover {
+        background-color: var(--primary-light);
+        color: white;
+    }
+    
+    .no-matches {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    .no-matches p:first-child {
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .filters-row {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            width: 100%;
+        }
+        
+        .filter-actions {
+            justify-content: stretch;
+            flex-direction: column;
+        }
+        
+        .matches-list {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 500px) {
+        .statistics-overview {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize multiselect for competitions
+        $('#competitions').select2({
+            placeholder: 'Seleziona competizioni',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+{% endblock %}

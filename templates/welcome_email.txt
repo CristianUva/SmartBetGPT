@@ -1,0 +1,18 @@
+Benvenuto nel nostro sito!
+
+Ciao {{ name }},
+
+Grazie per esserti registrato al nostro Sistema di Registrazione!
+
+Il tuo account è stato creato con successo e ora puoi accedere a tutte le funzionalità del nostro sito.
+
+Per accedere alla tua area personale, effettua il login con la tua email e la password che hai scelto durante la registrazione.
+
+Se hai domande o hai bisogno di assistenza, non esitare a contattarci compilando il modulo nella sezione contatti.
+
+Cordiali saluti,
+Il Team di Sistema di Registrazione
+
+---
+Questa è un'email automatica, ti preghiamo di non rispondere.
+© Sistema di Registrazione {{ now.year }}

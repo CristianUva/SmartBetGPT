@@ -1,0 +1,16 @@
+Nuovo Messaggio dal Sito Web
+
+È stato ricevuto un nuovo messaggio dal modulo di contatto:
+
+Da: {{ name }} <{{ email }}>
+
+Oggetto: {{ subject }}
+
+Messaggio:
+{{ message }}
+
+Per rispondere, è possibile inviare un'email direttamente all'indirizzo del mittente.
+
+---
+Questa è un'email automatica generata dal sistema.
+© {{ now.year }} Sistema di Registrazione - Tutti i diritti riservati

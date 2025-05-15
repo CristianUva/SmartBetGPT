@@ -1,0 +1,409 @@
+<!-- 
+    Template per visualizzare le partite in programma con funzionalità di filtro e visualizzazione per data.
+-->
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Partite{% endblock %}
+
+{% block content %}
+<!-- Container principale della dashboard -->
+<div class="dashboard-container">
+    <!-- Header della pagina con titolo e pulsante di ritorno alla dashboard -->
+    <div class="dashboard-header">
+        <h2>Partite</h2>
+        <a href="{{ url_for('main.dashboard') }}" class="btn-secondary">Torna alla Dashboard</a>
+    </div>
+    
+    <!-- Menu di navigazione principale della dashboard -->
+    <div class="dashboard-nav">
+        <ul>
+            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('match.matches') }}" class="active">Partite</a></li>
+            <li><a href="{{ url_for('match.statistics') }}">Statistiche</a></li>
+            <li><a href="{{ url_for('chatbot.chatbot_page') }}">ChatBot</a></li>
+        </ul>
+    </div>
+    
+    <!-- Contenuto principale della pagina -->
+    <div class="dashboard-content">
+        <h3>Partite in Programma</h3>
+        <p>Visualizza tutte le partite in programma e le previsioni generate dall'intelligenza artificiale.</p>
+        
+        <!-- Pannello dei filtri per personalizzare la visualizzazione delle partite -->
+        <div class="filters-panel">
+            <form action="{{ url_for('match.matches') }}" method="GET" id="matchesFilterForm">
+                <!-- Filtro per l'intervallo temporale -->
+                <div class="filter-group">
+                    <label for="days">Giorni:</label>
+                    <select name="days" id="days" onchange="this.form.submit()">
+                        <option value="1" {% if days == 1 %}selected{% endif %}>1 giorno</option>
+                        <option value="3" {% if days == 3 or not days %}selected{% endif %}>3 giorni</option>
+                        <option value="7" {% if days == 7 %}selected{% endif %}>7 giorni</option>
+                    </select>
+                </div>
+                
+                <!-- Filtro per selezionare specifiche competizioni -->
+                <div class="filter-group">
+                    <label for="competitions">Competizioni:</label>
+                    <div class="select-wrapper">
+                        <select name="competitions" id="competitions" multiple size="5">
+                            {% for competition in competitions %}
+                            <option value="{{ competition.id }}" {% if selected_competitions and competition.id|string in selected_competitions %}selected{% endif %}>
+                                {% if competition.country %}{{ competition.country }} - {% endif %}{{ competition.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <!-- Pulsanti per applicare o resettare i filtri -->
+                <div class="filter-actions">
+                    <button type="submit" class="btn-primary">Filtra</button>
+                    <a href="{{ url_for('match.matches') }}" class="btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Container principale che contiene tutte le partite raggruppate per data -->
+        <div class="matches-container">
+            {% if grouped_matches %}
+                {% for date_group in grouped_matches %}
+                    <!-- Gruppo di partite per una specifica data -->
+                    <div class="date-group">
+                        <!-- Intestazione con la data delle partite -->
+                        <h3 class="date-header">{{ date_group.display_date }}</h3>
+                        
+                        <!-- Lista di tutte le partite per la data corrente -->
+                        <div class="matches-list">
+                            {% for match in date_group.matches %}
+                                <!-- Card per una singola partita -->
+                                <div class="match-card">
+                                    <!-- Intestazione della card con informazioni sulla competizione -->
+                                    <div class="match-header">
+                                        <div class="header-content">
+                                            <!-- Dettagli della competizione con logo e nome -->
+                                            <div class="competition-line">
+                                                {% if match.competition.emblem %}
+                                                <img src="{{ match.competition.emblem }}" alt="{{ match.competition.name }}" class="competition-logo">
+                                                {% endif %}
+                                                {{ match.competition.name }}
+                                            </div>
+                                            <!-- Data e orario della partita -->
+                                            <div class="date-line">
+                                                {{ match.localDate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Sezione che mostra le squadre e il risultato/quote della partita -->
+                                    <div class="match-teams">
+                                        <!-- Squadra di casa con logo e nome -->
+                                        <div class="team home-team">
+                                            {% if match.homeTeam.crest %}
+                                            <img src="{{ match.homeTeam.crest }}" alt="{{ match.homeTeam.name }}" class="team-logo">
+                                            {% else %}
+                                            <!-- Fallback se il logo non è disponibile: mostra la prima lettera o la sigla -->
+                                            <span class="team-logo">{{ match.homeTeam.tla if match.homeTeam.tla else match.homeTeam.name[:1] }}</span>
+                                            {% endif %}
+                                            <span class="team-name">{{ match.homeTeam.name }}</span>
+                                        </div>
+                                        
+                                        <!-- Informazioni centrali: punteggio o quote a seconda dello stato -->
+                                        <div class="match-info">
+                                            {% if match.status == 'FINISHED' %}
+                                                <!-- Visualizzazione del punteggio per partite terminate -->
+                                                <div class="match-score">
+                                                    <span class="score-home">{{ match.score.fullTime.home }}</span>
+                                                    <span class="score-separator">-</span>
+                                                    <span class="score-away">{{ match.score.fullTime.away }}</span>
+                                                </div>
+                                                <div class="match-status">Terminata</div>
+                                            {% else %}
+                                                <!-- Visualizzazione delle quote per partite future -->
+                                                <span class="match-vs">VS</span>
+                                                <div class="match-odds">
+                                                    <span>1: {{ match.odds.homeWin if match.odds and match.odds is mapping and 'homeWin' in match.odds else '-' }}</span>
+                                                    <span>X: {{ match.odds.draw if match.odds and match.odds is mapping and 'draw' in match.odds else '-' }}</span>
+                                                    <span>2: {{ match.odds.awayWin if match.odds and match.odds is mapping and 'awayWin' in match.odds else '-' }}</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Squadra in trasferta con logo e nome -->
+                                        <div class="team away-team">
+                                            {% if match.awayTeam.crest %}
+                                            <img src="{{ match.awayTeam.crest }}" alt="{{ match.awayTeam.name }}" class="team-logo">
+                                            {% else %}
+                                            <!-- Fallback se il logo non è disponibile -->
+                                            <span class="team-logo">{{ match.awayTeam.tla if match.awayTeam.tla else match.awayTeam.name[:1] }}</span>
+                                            {% endif %}
+                                            <span class="team-name">{{ match.awayTeam.name }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Pulsanti di azione per la partita (es. promemoria) -->
+                                    <div class="match-actions">
+                                        <button class="btn-primary add-reminder">Aggiungi promemoria</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-matches">
+                    <p>Nessuna partita trovata per il periodo selezionato.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ----- STILI PER IL PANNELLO DEI FILTRI ----- */
+    .filters-panel {
+        background-color: var(--gray-light);
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .filter-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .filter-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--gray-dark);
+    }
+    
+    .filter-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--gray-medium);
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+        background-color: white;
+        color: var(--gray-dark);
+    }
+    
+    /* Contenitore per il menu a tendina con freccia personalizzata */
+    .select-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    
+    .select-wrapper::after {
+        content: '▼';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--gray-medium);
+    }
+    
+    .filter-actions {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    /* ----- STILI PER LE PARTITE E GRUPPI DI DATE ----- */
+    .matches-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .date-header {
+        border-bottom: 1px solid var(--gray-medium);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--secondary-color);
+        font-size: 1.3rem;
+    }
+    
+    /* Grid layout responsive per le card delle partite */
+    .matches-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* ----- STILI PER LE CARD DELLE PARTITE ----- */
+    .match-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    /* Header della card con colore principale */
+    .match-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.7rem 1rem;
+        height: 64px; /* Altezza fissa come nell'esempio delle statistiche */
+    }
+    
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    /* Riga con informazioni sulla competizione */
+    .competition-line {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+    }
+    
+    .competition-logo {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.5rem;
+        object-fit: contain;
+    }
+    
+    .date-line {
+        font-size: 0.9rem;
+    }
+    
+    /* ----- STILI PER LE SQUADRE E INFORMAZIONI PARTITA ----- */
+    .match-teams {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem 1rem;
+        border-bottom: 1px solid var(--gray-light);
+    }
+    
+    .team {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex: 1;
+    }
+    
+    .home-team, .away-team {
+        flex-direction: column;
+    }
+    
+    /* Logo della squadra o fallback con iniziale */
+    .team-logo {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        object-fit: contain;
+    }
+    
+    /* Nome della squadra con gestione overflow */
+    .team-name {
+        font-weight: 500;
+        font-size: 0.9rem;
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+    
+    /* Informazioni centrali (VS o punteggio) */
+    .match-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 15px;
+    }
+    
+    .match-vs {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    
+    .match-odds {
+        display: flex;
+        gap: 0.8rem;
+        font-size: 0.85rem;
+        color: var(--gray-dark);
+    }
+    
+    /* Stili per i risultati delle partite terminate */
+    .match-score {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .score-home, .score-away {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    
+    .score-separator {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0 8px;
+        color: var(--gray-dark);
+    }
+    
+    .match-status {
+        font-size: 0.85rem;
+        color: #d32f2f;
+        font-weight: 500;
+    }
+    
+    .match-actions {
+        display: flex;
+        gap: 0.8rem;
+        margin-top: 1rem;
+    }
+    
+    .match-actions button, .match-actions a {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .no-matches {
+        background-color: var(--gray-light);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inizializza Select2 per il selettore delle competizioni
+        $('#competitions').select2({
+            placeholder: 'Seleziona competizioni',
+            allowClear: true,
+            width: '100%'
+        });
+        
+        // Funzione per aggiungere un promemoria (simulazione)
+        const reminderButtons = document.querySelectorAll('.add-reminder');
+        reminderButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                alert('Promemoria aggiunto al calendario!');
+                button.textContent = 'Promemoria aggiunto';
+                button.disabled = true;
+            });
+        });
+    });
+</script>
+{% endblock %}

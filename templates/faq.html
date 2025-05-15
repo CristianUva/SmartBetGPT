@@ -1,0 +1,430 @@
+{% extends "layout.html" %}
+
+{% block title %}FAQ - SmartBetGPT{% endblock %}
+
+{% block content %}
+<div class="faq-container">
+    <div class="faq-header">
+        <h1>Domande Frequenti</h1>
+        <p>Ecco le risposte alle domande più frequenti su SmartBetGPT</p>
+    </div>
+
+    <div class="faq-categories">
+        <button class="category-btn active" data-category="general">Generale</button>
+        <button class="category-btn" data-category="account">Account</button>
+        <button class="category-btn" data-category="betting">Scommesse</button>
+        <button class="category-btn" data-category="ai">Intelligenza Artificiale</button>
+        <button class="category-btn" data-category="technical">Assistenza Tecnica</button>
+    </div>
+
+    <div class="faq-list">
+        <!-- Generale -->
+        <div class="faq-category active" id="general">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Che cos'è SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SmartBetGPT è una piattaforma che utilizza l'intelligenza artificiale per analizzare dati calcistici e fornire previsioni e consigli di scommesse. La nostra tecnologia combina algoritmi avanzati e dati in tempo reale per offrire analisi approfondite e strategie di scommessa informate.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>È necessario pagare per utilizzare SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Offriamo sia una versione gratuita con funzionalità di base, sia piani premium con analisi più dettagliate e funzionalità avanzate. Puoi consultare la sezione "Piani e Prezzi" per maggiori dettagli sulle diverse opzioni disponibili.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Quali campionati e competizioni copre SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>La nostra piattaforma copre le principali competizioni calcistiche europee e mondiali, tra cui:</p>
+                    <ul>
+                        <li>Champions League</li>
+                        <li>Europa League</li>
+                        <li>Premier League (Inghilterra)</li>
+                        <li>La Liga (Spagna)</li>
+                        <li>Serie A (Italia)</li>
+                        <li>Bundesliga (Germania)</li>
+                        <li>Ligue 1 (Francia)</li>
+                        <li>E molti altri campionati nazionali e competizioni internazionali</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Le previsioni di SmartBetGPT sono affidabili?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Le nostre previsioni si basano su analisi approfondite di dati statistici e storici, ma è importante ricordare che nessun sistema può garantire risultati certi nel mondo delle scommesse sportive. SmartBetGPT fornisce analisi probabilistiche per aiutare gli utenti a prendere decisioni più informate, ma il risultato finale degli eventi sportivi rimane sempre incerto.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account -->
+        <div class="faq-category" id="account">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Come posso creare un account?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Per creare un account, clicca sul pulsante "Registrati" nell'angolo in alto a destra del sito. Dovrai fornire il tuo nome, indirizzo email e creare una password. Una volta completata la registrazione, riceverai un'email di conferma.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Come posso recuperare la password se l'ho dimenticata?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Nella pagina di login, clicca sul link "Password dimenticata" sotto il form di accesso. Ti verrà chiesto di inserire il tuo indirizzo email, dopodiché riceverai un'email con le istruzioni per reimpostare la password.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Posso modificare le informazioni del mio profilo?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sì, puoi modificare le informazioni del tuo profilo in qualsiasi momento. Una volta effettuato l'accesso, vai alla sezione "Profilo" accessibile dal menu utente nell'angolo in alto a destra. Qui potrai aggiornare nome, email, password e altre impostazioni personali.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Come posso cancellare il mio account?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Per cancellare il tuo account, vai alla sezione "Impostazioni" nel tuo profilo e seleziona "Cancella account" in fondo alla pagina. Ti verrà chiesto di confermare la tua decisione e di inserire la password per ragioni di sicurezza. Una volta confermata, tutti i tuoi dati personali saranno eliminati dal nostro sistema.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scommesse -->
+        <div class="faq-category" id="betting">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Quali tipi di scommesse analizza SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SmartBetGPT analizza diversi tipi di scommesse calcistiche, tra cui:</p>
+                    <ul>
+                        <li>Risultato finale (1X2)</li>
+                        <li>Over/Under (numero di gol)</li>
+                        <li>Goal/No Goal (entrambe le squadre segnano)</li>
+                        <li>Risultati esatti</li>
+                        <li>Handicap asiatico</li>
+                        <li>Marcatori</li>
+                        <li>Combinazioni di mercati</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>SmartBetGPT offre consigli su come gestire il proprio bankroll?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sì, offriamo consigli sulla gestione del bankroll nella sezione "Strategie". Tuttavia, è importante ricordare che ogni scommettitore ha esigenze diverse e dovrebbe adattare le strategie di gestione del denaro in base alla propria situazione finanziaria e tolleranza al rischio.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>SmartBetGPT è un sito di scommesse?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>No, SmartBetGPT non è un sito di scommesse e non accetta puntate. Siamo una piattaforma di analisi e previsioni che fornisce informazioni per aiutare gli utenti a prendere decisioni più informate quando scommettono su altri siti autorizzati.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Come vengono calcolate le probabilità?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Le nostre probabilità si basano su complessi algoritmi di machine learning che analizzano una vasta gamma di dati, tra cui statistiche delle squadre, forma recente, scontri diretti, dati sui giocatori, condizioni meteo, fattore campo e molti altri parametri. Il nostro sistema si aggiorna continuamente e apprende dai nuovi dati per migliorare la precisione delle previsioni.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- IA -->
+        <div class="faq-category" id="ai">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Che tipo di tecnologia di IA utilizza SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SmartBetGPT utilizza diversi modelli di machine learning e intelligenza artificiale, inclusi i modelli di linguaggio GPT per l'analisi delle conversazioni con gli utenti e algoritmi predittivi specializzati per l'elaborazione dei dati sportivi e la generazione di pronostici.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Il chatbot di SmartBetGPT è in grado di rispondere a qualsiasi domanda sul calcio?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Il nostro chatbot è stato addestrato per rispondere a una vasta gamma di domande relative al calcio, alle statistiche delle partite, alle informazioni sulle squadre e ai metodi di scommessa. Tuttavia, è specializzato nell'ambito calcistico e potrebbe non essere in grado di fornire informazioni dettagliate su altri sport o argomenti non correlati.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Come viene aggiornato il modello AI?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Il nostro modello AI viene aggiornato regolarmente con i dati più recenti delle partite, dei risultati e delle statistiche. Inoltre, utilizziamo tecniche di apprendimento continuo che permettono al sistema di migliorare costantemente in base ai feedback e ai risultati reali.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>In che lingue è disponibile l'assistente AI?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Attualmente, il nostro assistente AI è disponibile principalmente in italiano, ma supporta anche inglese, spagnolo, francese e tedesco. Stiamo lavorando per aggiungere ulteriori lingue in futuro.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tecnico -->
+        <div class="faq-category" id="technical">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Su quali dispositivi posso utilizzare SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>SmartBetGPT è accessibile da qualsiasi dispositivo con un browser web, inclusi computer desktop, laptop, tablet e smartphone. La nostra interfaccia è completamente responsive e si adatta automaticamente alle diverse dimensioni dello schermo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>C'è un'app mobile per SmartBetGPT?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Attualmente non abbiamo un'app mobile dedicata, ma il nostro sito web è ottimizzato per dispositivi mobili e offre un'esperienza simile a quella di un'app quando vi accedi dal browser del tuo smartphone. Stiamo comunque lavorando allo sviluppo di app native per iOS e Android che saranno disponibili nei rispettivi app store nei prossimi mesi.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Come posso contattare il supporto tecnico?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Puoi contattare il nostro team di supporto tecnico in diversi modi:</p>
+                    <ul>
+                        <li>Email: support@smartbetgpt.com</li>
+                    </ul>
+                    <p>Il nostro team di supporto è disponibile dal lunedì al venerdì, dalle 9:00 alle 18:00 CET.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>È possibile esportare i dati e le analisi?</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sì, gli utenti Premium possono esportare dati e analisi in formato CSV o PDF. Questa funzionalità è disponibile nella dashboard personale, nella sezione "Esporta dati".</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.faq-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.faq-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.faq-header h1 {
+    color: #1e88e5;
+    margin-bottom: 10px;
+}
+
+.faq-header p {
+    color: #666;
+    font-size: 18px;
+}
+
+.faq-categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.category-btn {
+    padding: 10px 15px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.2s;
+}
+
+.category-btn:hover {
+    background: #e0e0e0;
+}
+
+.category-btn.active {
+    background: #1e88e5;
+    color: white;
+    border-color: #1e88e5;
+}
+
+.faq-category {
+    display: none;
+}
+
+.faq-category.active {
+    display: block;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.faq-question {
+    padding: 15px 20px;
+    background: #f9f9f9;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.toggle-icon {
+    font-size: 20px;
+    color: #1e88e5;
+    font-weight: bold;
+    transition: transform 0.3s;
+}
+
+.faq-item.active .toggle-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    padding: 20px;
+    max-height: 1000px;
+}
+
+.faq-answer p {
+    margin-top: 0;
+    line-height: 1.6;
+}
+
+.faq-answer ul {
+    padding-left: 20px;
+}
+
+.faq-answer ul li {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    .faq-categories {
+        flex-direction: column;
+    }
+    
+    .category-btn {
+        width: 100%;
+        border-radius: 4px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestione delle categorie
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const faqCategories = document.querySelectorAll('.faq-category');
+    
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Rimuovi la classe active da tutti i pulsanti
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Aggiungi la classe active al pulsante cliccato
+            button.classList.add('active');
+            
+            // Nascondi tutte le categorie
+            faqCategories.forEach(category => category.classList.remove('active'));
+            
+            // Mostra la categoria corrispondente
+            const categoryId = button.getAttribute('data-category');
+            document.getElementById(categoryId).classList.add('active');
+            
+            // Chiudi tutte le domande aperte quando si cambia categoria
+            document.querySelectorAll('.faq-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+        });
+    });
+    
+    // Gestione delle domande (apertura/chiusura)
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const faqItem = question.parentElement;
+            faqItem.classList.toggle('active');
+        });
+    });
+});
+</script>
+{% endblock %}

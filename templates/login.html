@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Accedi{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <img src="{{ url_for('static', filename='img/smartbetgpt.png') }}" alt="SmartBetGPT Logo">
+        <h2>Accedi</h2>
+    </div>
+
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", placeholder="La tua email") }}
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder="La tua password") }}
+            {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.submit(class="btn-primary btn-full") }}
+        </div>
+    </form>
+    
+    <div class="form-footer">
+        <p>Non hai un account? <a href="{{ url_for('auth.register') }}">Registrati ora</a></p>
+        <p><a href="{{ url_for('auth.forgot_password') }}">Password dimenticata?</a></p>
+    </div>
+</div>
+{% endblock %}

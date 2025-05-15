@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Contattaci{% endblock %}
+
+{% block content %}
+<div class="contact-container">
+    <div class="contact-header">
+        <h2>Contattaci</h2>
+        <p>Hai domande o suggerimenti? Siamo qui per aiutarti.</p>
+    </div>
+
+    <form method="POST" action="" class="contact-form" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", placeholder="Il tuo nome") }}
+            {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", placeholder="La tua email") }}
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.subject.label(class="form-label") }}
+            {{ form.subject(class="form-control", placeholder="Oggetto del messaggio") }}
+            {% if form.subject.errors %}
+                {% for error in form.subject.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.message.label(class="form-label") }}
+            <textarea name="message" class="form-control" placeholder="Il tuo messaggio" rows="6">{{ form.message.data or '' }}</textarea>
+            {% if form.message.errors %}
+                {% for error in form.message.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.submit(class="btn-primary btn-full") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

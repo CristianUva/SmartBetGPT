@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block title %}SmartBetGPT - Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Benvenuto, {{ current_user.name }}!</h2>
+        <a href="{{ url_for('auth.logout') }}" class="btn-secondary">Logout</a>
+    </div>
+    
+    <div class="dashboard-nav">
+        <ul>
+            <li><a href="{{ url_for('main.dashboard') }}" class="active">Dashboard</a></li>
+            <li><a href="{{ url_for('match.matches') }}">Partite</a></li>
+            <li><a href="{{ url_for('match.statistics') }}">Statistiche</a></li>
+            <li><a href="{{ url_for('chatbot.chatbot_page') }}">ChatBot</a></li>
+        </ul>
+    </div>
+    
+    <!-- Sezione principale con le funzionalità -->
+    <div class="ai-analysis-section">
+        <h2 class="ai-analysis-title">Scegli una funzionalità</h2>
+        
+        <div class="ai-features-container">
+            <div class="ai-feature">
+                <div class="feature-icon">
+                    <img src="{{ url_for('static', filename='img/logo_partite.png') }}" alt="Partite" class="feature-logo">
+                </div>
+                <h3>Partite</h3>
+                <p>Visualizza le partite in programma e le previsioni dell'intelligenza artificiale</p>
+                <a href="{{ url_for('match.matches') }}" class="feature-btn">Vai alle partite</a>
+            </div>
+            
+            <div class="ai-feature">
+                <div class="feature-icon">
+                    <img src="{{ url_for('static', filename='img/logo_statistiche.png') }}" alt="Statistiche" class="feature-logo">
+                </div>
+                <h3>Statistiche</h3>
+                <p>Analizza le tue statistiche personali e il rendimento delle scommesse</p>
+                <a href="{{ url_for('match.statistics') }}" class="feature-btn">Visualizza statistiche</a>
+            </div>
+            
+            <div class="ai-feature">
+                <div class="feature-icon">
+                    <img src="{{ url_for('static', filename='img/logo_chatbot.png') }}" alt="ChatBot" class="feature-logo">
+                </div>
+                <h3>ChatBot</h3>
+                <p>Chatta con il nostro assistente AI per consigli personalizzati</p>
+                <a href="{{ url_for('chatbot.chatbot_page') }}" class="feature-btn">Parla con l'AI</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sezione Discord -->
+    <div class="dashboard-discord-section">
+        <h2 class="section-title">Community Discord</h2>
+        <div class="discord-content">
+            <div class="discord-info">
+                <p>Unisciti alla nostra community su Discord per discutere delle previsioni e connetterti con altri utenti appassionati di calcio e di AI!</p>
+                <div class="discord-features-btn">
+                    </ul>
+                    <a href="https://discord.gg/4DgKWUFBet" target="_blank" class="btn-discord">
+                        <i class="fab fa-discord"></i> Unisciti
+                    </a>
+                </div>
+            </div>
+            <div class="discord-image">
+                <img src="{{ url_for('static', filename='img/discord.png') }}" alt="Discord Community" class="discord-logo">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

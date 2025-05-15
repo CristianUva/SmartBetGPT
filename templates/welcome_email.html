@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Benvenuto nel nostro sito!</h1>
+    </div>
+    <div class="content">
+        <p>Ciao <strong>{{ name }}</strong>,</p>
+        
+        <p>Grazie per esserti registrato a SmartBetGPT!</p>
+        
+        <p>Il tuo account è stato creato con successo e ora puoi accedere a tutte le funzionalità del nostro sito.</p>
+        
+        <p>Per accedere alla tua area personale, effettua il login con la tua email e la password che hai scelto durante la registrazione.</p>
+        
+        <p>Se hai domande o hai bisogno di assistenza, non esitare a contattarci compilando il modulo nella sezione contatti.</p>
+        
+        <p>Cordiali saluti,<br>Il Team di Sistema di Registrazione</p>
+    </div>
+    <div class="footer">
+        <p>Questa è un'email automatica, ti preghiamo di non rispondere.</p>
+        <p>&copy; Sistema di Registrazione {{ now.year }}</p>
+    </div>
+</body>
+</html>

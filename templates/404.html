@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}Pagina non trovata - Sistema di Registrazione{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-1">404</h1>
+    <p class="lead">Pagina non trovata</p>
+    <p>La pagina che stai cercando non esiste o è stata spostata.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary">Torna alla Home</a>
+</div>
+{% endblock %}

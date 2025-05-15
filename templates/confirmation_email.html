@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Messaggio Ricevuto</h1>
+    </div>
+    <div class="content">
+        <p>Gentile <strong>{{ name }}</strong>,</p>
+        
+        <p>Grazie per averci contattato. Abbiamo ricevuto il tuo messaggio e lo valuteremo al più presto.</p>
+        
+        <p>Ti risponderemo entro 24-48 ore lavorative.</p>
+        
+        <p>Nel frattempo, se hai bisogno di assistenza immediata, puoi visitare la nostra sezione FAQ sul sito web.</p>
+        
+        <p>Cordiali saluti,<br>Il Team di Sistema di Registrazione</p>
+    </div>
+    <div class="footer">
+        <p>Questa è un'email automatica, ti preghiamo di non rispondere.</p>
+        <p>&copy; {{ now.year }} Sistema di Registrazione - Tutti i diritti riservati</p>
+    </div>
+</body>
+</html>
