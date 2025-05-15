@@ -233,7 +233,6 @@ L'applicazione utilizza l'API Football-data.org per ottenere:
 - Partite in programma nei prossimi 7 giorni
 - Risultati storici e performance delle squadre
 - Probabilità e quote
-- Classifiche aggiornate
 
 ### Assistente AI tramite OpenRouter
 
