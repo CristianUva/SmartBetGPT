@@ -2,13 +2,17 @@
 import os
 import sys
 import logging
-from app import app, db
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from app import create_app, db
 from models.user import User
 from flask_migrate import Migrate, upgrade, init, migrate, stamp
 
 # Configurazione logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+# Create app instance
+app = create_app()
 
 # Create migration instance
 migrate_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'migrations')

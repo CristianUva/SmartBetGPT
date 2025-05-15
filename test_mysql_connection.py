@@ -20,10 +20,10 @@ def test_mysql_connection():
         
         if is_pythonanywhere:
             # Configurazione per PythonAnywhere
-            mysql_user = os.environ.get('MYSQL_USER', 'cristianuva')
+            mysql_user = os.environ.get('MYSQL_USER', 'SmartBetGPT')
             mysql_password = os.environ.get('MYSQL_PASSWORD', 'Angelogalanti69')
-            mysql_host = os.environ.get('MYSQL_HOST', 'cristianuva.mysql.pythonanywhere-services.com')
-            mysql_db = os.environ.get('MYSQL_DATABASE', 'cristianuva$default')
+            mysql_host = os.environ.get('MYSQL_HOST', 'SmartBetGPT.mysql.pythonanywhere-services.com')
+            mysql_db = os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$database')
         else:
             # Configurazione per ambiente locale
             mysql_user = os.environ.get('MYSQL_USER_LOCAL', 'root')

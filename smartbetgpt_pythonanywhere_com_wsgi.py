@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 # IMPORTANTE: Cambia questo percorso con il tuo username di PythonAnywhere
 username = 'SmartBetGPT'  # Modifica con il tuo username effettivo
-path = f'/home/{username}/mysite/SmartBetGPT'
+path = f'/home/{username}/SmartBetGPT'
 
 logger.info(f"Impostazione percorso app: {path}")
 

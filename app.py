@@ -51,7 +51,7 @@ def configure_app(app):
         mysql_user = os.environ.get('MYSQL_USER', 'SmartBetGPT')
         mysql_password = os.environ.get('MYSQL_PASSWORD', 'Angelogalanti69')
         mysql_host = os.environ.get('MYSQL_HOST', 'SmartBetGPT.mysql.pythonanywhere-services.com')
-        mysql_db = os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$default')
+        mysql_db = os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$database')
         
         # MySQLdb URL format
         app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}'

@@ -32,9 +32,9 @@ def connect_to_mysql():
             # Configurazione per PythonAnywhere
             mysql_config = {
                 'user': os.environ.get('MYSQL_USER', 'SmartBetGPT'),
-                'password': os.environ.get('MYSQL_PASSWORD', 'Smartbetgpt69'),
+                'password': os.environ.get('MYSQL_PASSWORD', 'Angelogalanti69'),
                 'host': os.environ.get('MYSQL_HOST', 'SmartBetGPT.mysql.pythonanywhere-services.com'),
-                'database': os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$default'),
+                'database': os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$database'),
                 'charset': 'utf8mb4',
                 'cursorclass': pymysql.cursors.DictCursor
             }

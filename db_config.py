@@ -13,9 +13,9 @@ if is_pythonanywhere:
     # Configurazione per PythonAnywhere
     db_config = {
         'user': os.environ.get('MYSQL_USER', 'SmartBetGPT'),
-        'password': os.environ.get('MYSQL_PASSWORD', 'Smartbetgpt69'),  
+        'password': os.environ.get('MYSQL_PASSWORD', 'Angelogalanti69'),  
         'host': os.environ.get('MYSQL_HOST', 'SmartBetGPT.mysql.pythonanywhere-services.com'),
-        'database': os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$default'),  # Formato corretto su PythonAnywhere
+        'database': os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$database'),  # Formato corretto su PythonAnywhere
         'raise_on_warnings': True
     }
     logging.info(f"Usando configurazione database per PythonAnywhere: {db_config['host']} - {db_config['database']}")

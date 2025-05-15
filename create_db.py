@@ -1,7 +1,8 @@
 # create_db.py - Database initialization script
 import os
 import sys
-from app import app, db
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from app import create_app, db
 from models.user import User
 import logging
 
@@ -12,6 +13,9 @@ print("Inizializzazione database...")
 
 # Rileva se siamo su PythonAnywhere
 is_pythonanywhere = 'PYTHONANYWHERE_SITE' in os.environ
+
+# Crea l'applicazione Flask
+app = create_app()
 
 with app.app_context():
     try:
