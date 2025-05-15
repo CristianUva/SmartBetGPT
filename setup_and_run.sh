@@ -1,4 +1,7 @@
-#!/bin/bash
+# !/bin/bash
+# chmod +x setup_and_run.sh
+# ./setup_and_run.sh
+
 echo "===== Installazione e avvio di PaginaRegistrazione ====="
 
 echo "Creazione dell'ambiente virtuale..."

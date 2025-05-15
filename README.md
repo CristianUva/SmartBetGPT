@@ -29,7 +29,7 @@ SmartBetGPT è una piattaforma di scommesse sportive alimentata da intelligenza 
 
 - **Backend**: Flask, SQLAlchemy, Python 3.8+
 - **Frontend**: HTML, CSS, JavaScript, Jinja2
-- **Database**: SQLite (configurabile anche con MySQL)
+- **Database**: MySQL per produzione su PythonAnywhere, SQLite per sviluppo locale
 - **AI**: Integrazione con OpenRouter API che supporta vari modelli LLM (GPT-3.5, Claude, PaLM, ecc.)
 - **Dati sportivi**: API Football-data.org
 - **Autenticazione**: Flask-Login
@@ -109,7 +109,10 @@ PaginaRegistrazione/
 ├── app.py                  # File principale dell'applicazione Flask
 ├── config.py               # Configurazioni dell'applicazione
 ├── create_db.py            # Script per la creazione del database
-├── database.db             # Database SQLite
+├── update_db.py            # Script per aggiornare la struttura del database
+├── db_config.py            # Configurazione connessione MySQL
+├── test_mysql_connection.py # Script per testare la connessione a MySQL
+├── migrate_to_mysql.py     # Script per migrazione dati da SQLite a MySQL
 ├── requirements.txt        # Dipendenze Python
 ├── models/                 # Modelli di dati
 │   └── match.py            # Modello per le partite
@@ -189,7 +192,11 @@ Directory per i file specifici dell'istanza dell'applicazione, come database e f
 - **`app.py`**: Entry point dell'applicazione Flask
 - **`config.py`**: Configurazioni centralizzate dell'applicazione
 - **`create_db.py`**: Script per inizializzare il database
-- **`update_db.py`**: Script per aggiornare la struttura del database
+- **`update_db.py`**: Script per aggiornare la struttura del database e gestire le migrazioni
+- **`db_config.py`**: Configurazioni per la connessione al database MySQL
+- **`test_mysql_connection.py`**: Script per testare la connessione a MySQL
+- **`migrate_to_mysql.py`**: Script per migrare i dati da SQLite a MySQL
+- **`wsgi_pa.py`**: File di configurazione WSGI per PythonAnywhere
 - **`setup_and_run.sh`**: Script di avvio per Linux/macOS
 - **`setup_and_run.bat`**: Script di avvio per Windows
 - **`requirements.txt`**: Elenco delle dipendenze Python

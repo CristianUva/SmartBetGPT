@@ -2,10 +2,8 @@
 import os
 from datetime import timedelta
 
-# Configurazione database
-basedir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(basedir, 'database.db')
-SQLALCHEMY_DATABASE_URI = f'sqlite:///{db_path}'
+# La configurazione del database è ora in app.py
+# Compatibile sia con SQLite (locale) che con MySQL (PythonAnywhere)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Chiave segreta per la sicurezza

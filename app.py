@@ -42,13 +42,39 @@ def create_app():
 
 def configure_app(app):
     """Configure the Flask application"""
-    # Create absolute path for database
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    db_path = os.path.join(basedir, 'database.db')
+    # Check if we're on PythonAnywhere
+    is_pythonanywhere = 'PYTHONANYWHERE_SITE' in os.environ
+    
+    # Configure database based on environment
+    if is_pythonanywhere:
+        # MySQL configuration for PythonAnywhere
+        mysql_user = os.environ.get('MYSQL_USER', 'SmartBetGPT')
+        mysql_password = os.environ.get('MYSQL_PASSWORD', 'Smartbetgpt69')
+        mysql_host = os.environ.get('MYSQL_HOST', 'SmartBetGPT.mysql.pythonanywhere-services.com')
+        mysql_db = os.environ.get('MYSQL_DATABASE', 'SmartBetGPT$default')
+        
+        # MySQLdb URL format
+        app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}'
+        app.logger.info(f"Configurato il database MySQL su PythonAnywhere: {mysql_host}")
+    else:
+        # Local configuration - still supporting both SQLite and MySQL
+        if os.environ.get('USE_MYSQL_LOCAL', 'false').lower() == 'true':
+            # Use MySQL locally too
+            mysql_user = os.environ.get('MYSQL_USER_LOCAL', 'root')
+            mysql_password = os.environ.get('MYSQL_PASSWORD_LOCAL', 'x')
+            mysql_host = os.environ.get('MYSQL_HOST_LOCAL', 'localhost')
+            mysql_db = os.environ.get('MYSQL_DATABASE_LOCAL', 'smartbetgpt')
+            app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}'
+            app.logger.info(f"Configurato il database MySQL locale: {mysql_host}")
+        else:
+            # Default to SQLite for local development
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            db_path = os.path.join(basedir, 'database.db')
+            app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+            app.logger.info(f"Configurato database SQLite locale: {db_path}")
     
     # App configuration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-please-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Email configuration
