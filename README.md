@@ -99,10 +99,8 @@ Esistono tre modi per avviare e accedere a SmartBetGPT:
 
 ### Via Web
 
-(COMING SOON!)
-
 Accedi direttamente alla versione online tramite il seguente URL:
-[SmartBetGPT.pythonanywhere.com](https://SmartBetGPT.pythonanywhere.com)
+[smartbetgpt.me](https://smartbetgpt.me)
 
 ## Struttura del progetto
 
