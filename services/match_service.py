@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get API key from environment variables
-API_KEY = os.getenv("FOOTBALL_DATA_API_KEY")
+API_KEY = os.getenv("FOOTBALL_API_KEY", "d9cd4e4ddc5047f98e5d8ab1b89a4820")
 
 class MatchService:
     """Service to handle match-related operations"""

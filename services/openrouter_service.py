@@ -128,14 +128,39 @@ class OpenRouterService:
             return simulated_response, "Simulazione (API Key non configurata)"
         
         try:
-            response = requests.post(self.api_url, headers=headers, json=payload)
+            logging.info(f"Sending request to OpenRouter API with model: {selected_model}")
+            logging.info(f"API URL: {self.api_url}")
+            logging.info(f"Headers: {headers}")
+            logging.info(f"Payload: {payload}")
+            
+            response = requests.post(self.api_url, headers=headers, json=payload, timeout=30)
+            
+            logging.info(f"Response status code: {response.status_code}")
+            logging.info(f"Response headers: {response.headers}")
+            
+            if response.status_code != 200:
+                logging.error(f"API returned status {response.status_code}: {response.text}")
+                error_message = f"API OpenRouter errore {response.status_code}: {response.text}"
+                return error_message, selected_model
+            
             response.raise_for_status()
-            ai_response = response.json().get('choices', [{}])[0].get('message', {}).get('content', '')
+            response_data = response.json()
+            logging.info(f"Response data: {response_data}")
+            
+            ai_response = response_data.get('choices', [{}])[0].get('message', {}).get('content', '')
             
             # Aggiungi la risposta dell'AI alla cronologia
             self.add_to_conversation_history(user_id, "assistant", ai_response)
             
             return ai_response, selected_model
+        except requests.exceptions.Timeout:
+            error_message = "Timeout nell'API OpenRouter - riprova più tardi"
+            logging.error(error_message)
+            return error_message, selected_model
+        except requests.exceptions.ConnectionError:
+            error_message = "Errore di connessione all'API OpenRouter"
+            logging.error(error_message)
+            return error_message, selected_model
         except Exception as e:
             error_message = f"Errore nell'API OpenRouter: {str(e)}"
             logging.error(error_message)
