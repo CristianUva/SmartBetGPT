@@ -1,3 +1,6 @@
+#chmod +x ./setup_and_run.sh
+#./setup_and_run.sh
+
 #!/bin/bash
 echo "===== Installazione e avvio di PaginaRegistrazione ====="
 

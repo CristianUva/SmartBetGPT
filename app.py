@@ -48,8 +48,15 @@ def configure_app(app):
     
     # App configuration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-please-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    
+    # Database configuration - use DATABASE_URL if provided, otherwise default to SQLite
+    database_url = os.getenv('DATABASE_URL', f'sqlite:///{db_path}')
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Production settings
+    app.config['ENV'] = os.getenv('FLASK_ENV', 'development')
+    app.config['DEBUG'] = os.getenv('FLASK_DEBUG', 'True').lower() in ('true', '1', 't')
     
     # Email configuration
     app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
