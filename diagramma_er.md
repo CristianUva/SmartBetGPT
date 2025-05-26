@@ -1,3 +1,6 @@
+# Diagramma ER - SmartBetGPT Database
+
+```mermaid
 erDiagram
     %% Entità User - L'unica tabella del database attualmente definita
     User {
@@ -9,7 +12,7 @@ erDiagram
         boolean email_confirmed "DEFAULT FALSE"
         datetime email_confirmed_on "NULLABLE"
         string reset_token "UNIQUE, NULLABLE, VARCHAR(100)"
-        datetime reset_token_expiry "NULLABLE"
+        string reset_token_expiry "NULLABLE"
     }
 
     %% Note: I dati delle partite e delle API vengono gestiti in memoria
@@ -32,3 +35,13 @@ erDiagram
     %% Relazioni concettuali (non nel database)
     User ||--o{ FootballData : "accesses via API"
     User ||--o{ ChatData : "interacts with chatbot"
+```
+
+## 📊 **Descrizione del Database**
+
+### **🗃️ Tabella Reale:**
+- **User**: Unica tabella persistente nel database SQLite
+
+### **☁️ Dati Esterni:**
+- **FootballData**: Gestiti via API Football-data.org
+- **ChatData**: Conversazioni temporanee in memoria
